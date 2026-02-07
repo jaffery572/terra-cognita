@@ -1,4 +1,8 @@
-# terra_cognita.py - DIGITAL TWIN OF EARTH - LIVE PLANETARY NERVOUS SYSTEM
+"""
+🤖 AI-SPARK: Real-Time Universal AI Assistant
+Pakistan ka pehla complete AI solution platform
+"""
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -6,1582 +10,1326 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import time
-import asyncio
-import aiohttp
 import json
-from typing import Dict, List, Tuple, Optional
+import os
+import io
+from PIL import Image
+import base64
+from typing import Dict, List, Optional
 import warnings
-import re  # Added for string parsing
 warnings.filterwarnings('ignore')
 
-# ==================== QUANTUM SIMULATION ENGINE ====================
-class QuantumCivilizationSimulator:
-    """Simulates entire civilization as quantum system"""
-    
-    def __init__(self):
-        self.qubits = 1000000  # Million simulated qubits
-        self.parallel_universes = 1000
-        self.civilization_states = []
-        
-    def simulate_civilization_evolution(self, start_year=2024, years=100):
-        """Simulate civilization evolution across parallel universes"""
-        simulations = []
-        
-        for universe in range(self.parallel_universes):
-            simulation = self._simulate_single_universe(start_year, years, universe)
-            simulations.append(simulation)
-        
-        # Quantum superposition of all simulations
-        collapsed_reality = self._collapse_wave_function(simulations)
-        return collapsed_reality
-    
-    def _simulate_single_universe(self, start_year, years, seed):
-        """Simulate a single parallel universe"""
-        np.random.seed(seed)
-        
-        timeline = []
-        current_state = {
-            'global_population': 8.0,
-            'civilization_health': 65,
-            'technology_level': 2024,
-            'energy_consumption': 18,
-            'peace_index': 60,
-            'environmental_health': 45
-        }
-        
-        for year in range(years):
-            # Simulate progress with random quantum fluctuations
-            current_state = self._apply_quantum_evolution(current_state, year)
-            timeline.append({
-                'year': start_year + year,
-                'universe': seed,
-                **current_state.copy()
-            })
-            
-            # Check for civilization collapse
-            if current_state['civilization_health'] < 20:
-                timeline[-1]['collapse'] = True
-                break
-        
-        return timeline
-    
-    def _apply_quantum_evolution(self, state, year):
-        """Apply quantum-inspired evolution rules"""
-        # Quantum tunneling through progress barriers
-        if np.random.random() < 0.01:  # 1% chance of quantum leap
-            state['technology_level'] += np.random.randint(10, 50)
-            state['civilization_health'] += np.random.randint(5, 20)
-        
-        # Normal evolution
-        state['global_population'] *= (1 + np.random.uniform(-0.01, 0.02))
-        state['civilization_health'] += np.random.uniform(-1, 2)
-        state['technology_level'] += np.random.uniform(0.5, 3)
-        state['peace_index'] += np.random.uniform(-2, 3)
-        state['environmental_health'] += np.random.uniform(-1, 1)
-        
-        # Ensure bounds
-        for key in state:
-            if 'health' in key or 'index' in key:
-                state[key] = max(0, min(100, state[key]))
-        
-        return state
-    
-    def _collapse_wave_function(self, simulations):
-        """Collapse quantum superposition to single reality"""
-        # Average all parallel universes
-        if not simulations:
-            return []
-        
-        # Find the longest timeline
-        max_len = max(len(sim) for sim in simulations)
-        
-        collapsed = []
-        for i in range(max_len):
-            year_data = []
-            for sim in simulations:
-                if i < len(sim):
-                    year_data.append(sim[i])
-            
-            if year_data:
-                # Create average of all universes
-                avg_state = {}
-                for key in year_data[0].keys():
-                    if key not in ['year', 'universe', 'collapse']:
-                        values = [d[key] for d in year_data if key in d]
-                        if values:
-                            avg_state[key] = np.mean(values)
-                
-                collapsed.append({
-                    'year': year_data[0]['year'] if 'year' in year_data[0] else i + 2024,
-                    **avg_state
-                })
-        
-        return collapsed
+# Page configuration
+st.set_page_config(
+    page_title="🤖 AI-SPARK - Universal AI Assistant",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# ==================== REAL-TIME PLANETARY MONITOR ====================
-class PlanetaryNervousSystem:
-    """Monitors Earth in real-time (simulated)"""
-    
-    def __init__(self):
-        self.human_count = 8000000000
-        self.vehicles = 1500000000
-        self.buildings = 1000000000
-        self.last_update = datetime.now()
-        
-    async def get_global_activity_stream(self):
-        """Get real-time activity stream of entire planet"""
-        activities = []
-        
-        # Simulate 1000 random global events per second
-        for _ in range(1000):
-            activity = {
-                'timestamp': datetime.now(),
-                'type': np.random.choice([
-                    'birth', 'death', 'marriage', 'travel', 'purchase',
-                    'communication', 'work', 'education', 'conflict', 'cooperation'
-                ]),
-                'latitude': np.random.uniform(-90, 90),
-                'longitude': np.random.uniform(-180, 180),
-                'intensity': np.random.uniform(0, 1),
-                'affected_people': np.random.randint(1, 10000)
-            }
-            activities.append(activity)
-        
-        return activities
-    
-    def calculate_global_vital_signs(self):
-        """Calculate Earth's vital signs like a patient"""
-        return {
-            'heartbeat': 60 + 10 * np.sin(time.time() / 10),  # Simulated pulse
-            'respiration': 12 + 3 * np.sin(time.time() / 15),
-            'temperature': 15 + 5 * np.sin(time.time() / 20),  # Global temp
-            'blood_pressure': (120, 80),  # (Systolic, Diastolic) - Civilization stress
-            'neural_activity': np.random.uniform(0.7, 0.9),  # Global brain activity
-            'metabolic_rate': 2000 + 500 * np.sin(time.time() / 30),  # Energy consumption
-            'immune_response': 85 + 10 * np.sin(time.time() / 25)  # Societal resilience
-        }
-
-# ==================== TIME TRAVEL ENGINE ====================
-class ChronoNavigator:
-    """Time travel simulation engine"""
-    
-    HISTORICAL_DATABASE = {
-        # Major historical events with coordinates
-        'dinosaurs_extinction': {'year': -66000000, 'lat': 21.5, 'lon': -88.5, 'description': 'Chicxulub impact'},
-        'roman_empire_fall': {'year': 476, 'lat': 41.9, 'lon': 12.5, 'description': 'Fall of Western Roman Empire'},
-        'black_death': {'year': 1347, 'lat': 43.1, 'lon': 12.4, 'description': 'Plague arrives in Europe'},
-        'columbus_america': {'year': 1492, 'lat': 19.9, 'lon': -75.1, 'description': 'Columbus reaches Americas'},
-        'industrial_revolution': {'year': 1760, 'lat': 52.5, 'lon': -1.9, 'description': 'Start of Industrial Revolution'},
-        'wwii_end': {'year': 1945, 'lat': 52.5, 'lon': 13.4, 'description': 'End of World War II'},
-        'internet_born': {'year': 1983, 'lat': 37.4, 'lon': -122.1, 'description': 'ARPANET adopts TCP/IP'},
-        'smartphone_era': {'year': 2007, 'lat': 37.3, 'lon': -122.0, 'description': 'First iPhone released'},
-        'covid_pandemic': {'year': 2019, 'lat': 30.6, 'lon': 114.3, 'description': 'COVID-19 pandemic begins'},
-        'ai_singularity': {'year': 2029, 'lat': 37.4, 'lon': -122.1, 'description': 'AGI achieved (predicted)'},
+# Custom CSS
+st.markdown("""
+<style>
+    .main-header {
+        font-size: 3.5rem;
+        font-weight: 900;
+        text-align: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
     }
     
-    def travel_to_year(self, target_year):
-        """Simulate traveling to any year"""
-        current_year = datetime.now().year
+    .sub-header {
+        text-align: center;
+        color: #666;
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .card {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .feature-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 10px 0;
+    }
+    
+    .solution-box {
+        background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 15px 0;
+    }
+    
+    .warning-box {
+        background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 15px 0;
+    }
+    
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: bold;
+        width: 100%;
+        transition: all 0.3s;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .metric-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #667eea;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        margin: 10px 0;
+    }
+    
+    .chat-bubble {
+        padding: 15px;
+        border-radius: 15px;
+        margin: 10px 0;
+        max-width: 80%;
+    }
+    
+    .user-bubble {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        margin-left: auto;
+    }
+    
+    .ai-bubble {
+        background: #f0f2f6;
+        color: #333;
+        margin-right: auto;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# Pakistan-Specific Data
+PAKISTAN_DATA = {
+    "cities": ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Quetta", "Gujranwala", "Sialkot"],
+    "languages": ["Urdu", "Punjabi", "Sindhi", "Pashto", "Balochi", "Saraiki", "English"],
+    "emergency_numbers": {
+        "Police": "15",
+        "Ambulance": "1122",
+        "Fire Brigade": "16",
+        "Rescue 1122": "1122",
+        "Women Helpline": "1099",
+        "Child Protection": "1121"
+    },
+    "government_websites": {
+        "NADRA": "https://www.nadra.gov.pk",
+        "FBR": "https://www.fbr.gov.pk",
+        "HEC": "https://www.hec.gov.pk",
+        "Punjab Police": "https://punjabpolice.gov.pk",
+        "Sindh Police": "https://sindhpolice.gov.pk"
+    }
+}
+
+# AI Modules Database
+AI_MODULES = {
+    "medical": {
+        "name": "🏥 Medical Assistant",
+        "icon": "🏥",
+        "description": "Medical diagnosis, medicine information, doctor recommendations",
+        "capabilities": [
+            "Symptom checker",
+            "Medicine information",
+            "Doctor/hospital finder",
+            "First aid guidance",
+            "Mental health support"
+        ]
+    },
+    "legal": {
+        "name": "⚖️ Legal Assistant",
+        "icon": "⚖️",
+        "description": "Legal advice, document review, lawyer matching",
+        "capabilities": [
+            "Legal document review",
+            "Case analysis",
+            "Lawyer matching",
+            "Legal rights information",
+            "Court procedure guidance"
+        ]
+    },
+    "education": {
+        "name": "🎓 Education Assistant",
+        "icon": "🎓",
+        "description": "Homework help, career guidance, scholarship finder",
+        "capabilities": [
+            "Homework solutions",
+            "Career counseling",
+            "Scholarship finder",
+            "University admissions",
+            "Skill development"
+        ]
+    },
+    "business": {
+        "name": "💼 Business Assistant",
+        "icon": "💼",
+        "description": "Business plans, market analysis, funding guidance",
+        "capabilities": [
+            "Business plan generator",
+            "Market research",
+            "Funding opportunities",
+            "Tax guidance",
+            "Legal compliance"
+        ]
+    },
+    "technical": {
+        "name": "💻 Technical Assistant",
+        "icon": "💻",
+        "description": "Code debugging, tech solutions, device troubleshooting",
+        "capabilities": [
+            "Code debugging",
+            "Tech solutions",
+            "Device troubleshooting",
+            "Software recommendations",
+            "IT support"
+        ]
+    },
+    "government": {
+        "name": "🏛️ Government Services",
+        "icon": "🏛️",
+        "description": "Government form filling, service information, complaint registration",
+        "capabilities": [
+            "Form filling assistance",
+            "Service information",
+            "Complaint registration",
+            "Document requirements",
+            "Procedure guidance"
+        ]
+    },
+    "agriculture": {
+        "name": "🌾 Agriculture Assistant",
+        "icon": "🌾",
+        "description": "Crop advice, weather information, market prices",
+        "capabilities": [
+            "Crop selection advice",
+            "Weather information",
+            "Market prices",
+            "Fertilizer guidance",
+            "Disease identification"
+        ]
+    },
+    "personal": {
+        "name": "👤 Personal Assistant",
+        "icon": "👤",
+        "description": "Daily planning, finance management, life coaching",
+        "capabilities": [
+            "Daily planning",
+            "Finance management",
+            "Life coaching",
+            "Health tracking",
+            "Goal setting"
+        ]
+    }
+}
+
+class AISparkAssistant:
+    """Main AI Assistant Class"""
+    
+    def __init__(self):
+        self.user_history = []
+        self.solutions_provided = 0
         
-        if target_year == current_year:
+    def analyze_problem(self, problem_text, category):
+        """Analyze user problem and provide solution"""
+        solutions = {
+            "medical": self._medical_solution,
+            "legal": self._legal_solution,
+            "education": self._education_solution,
+            "business": self._business_solution,
+            "technical": self._technical_solution,
+            "government": self._government_solution,
+            "agriculture": self._agriculture_solution,
+            "personal": self._personal_solution
+        }
+        
+        if category in solutions:
+            return solutions[category](problem_text)
+        else:
+            return self._general_solution(problem_text)
+    
+    def _medical_solution(self, problem):
+        """Generate medical solution"""
+        common_issues = {
+            "fever": {
+                "diagnosis": "Possible viral infection or other illness",
+                "immediate_action": [
+                    "Take paracetamol 500mg (if no allergies)",
+                    "Drink plenty of fluids",
+                    "Rest and monitor temperature"
+                ],
+                "when_to_see_doctor": "If fever persists >3 days or temperature >103°F",
+                "recommended_doctors": ["General Physician", "Internal Medicine"],
+                "hospitals": ["Aga Khan Hospital", "Shaukat Khanum", "CMH Hospital"],
+                "home_remedies": [
+                    "Use wet cloth on forehead",
+                    "Drink ginger tea",
+                    "Take steam inhalation"
+                ]
+            },
+            "headache": {
+                "diagnosis": "Could be tension headache, migraine, or stress-related",
+                "immediate_action": [
+                    "Take rest in dark room",
+                    "Drink plenty of water",
+                    "Massage temples gently"
+                ],
+                "when_to_see_doctor": "If headache is severe, sudden, or with vision problems",
+                "recommended_medicines": ["Paracetamol", "Ibuprofen (if no stomach issues)"],
+                "prevention": [
+                    "Regular sleep schedule",
+                    "Stay hydrated",
+                    "Reduce screen time"
+                ]
+            }
+        }
+        
+        # Simple keyword matching (in real app, use NLP)
+        problem_lower = problem.lower()
+        
+        if any(word in problem_lower for word in ['fever', 'temperature', 'heat']):
+            return common_issues['fever']
+        elif any(word in problem_lower for word in ['headache', 'head pain', 'migraine']):
+            return common_issues['headache']
+        else:
+            return self._general_medical_advice(problem)
+    
+    def _legal_solution(self, problem):
+        """Generate legal solution"""
+        return {
+            "issue_type": "Legal Matter",
+            "recommended_actions": [
+                "Document all evidence related to your case",
+                "Consult with a licensed lawyer in your area",
+                "Check statute of limitations for your case type",
+                "Gather witness statements if applicable"
+            ],
+            "pakistan_specific": [
+                f"Contact District Bar Association in your city",
+                "Visit https://www.supremecourt.gov.pk for high court matters",
+                "Legal aid available through Punjab Legal Aid Society"
+            ],
+            "document_checklist": [
+                "CNIC copy",
+                "Related documents",
+                "Witness details",
+                "Previous correspondence"
+            ],
+            "estimated_timeline": "3-6 months for most civil cases",
+            "approximate_cost": "PKR 20,000 - 100,000 depending on case complexity"
+        }
+    
+    def _education_solution(self, problem):
+        """Generate education solution"""
+        return {
+            "problem_type": "Educational",
+            "solutions": [
+                "Break down complex topics into smaller parts",
+                "Use visual aids and diagrams",
+                "Practice with past papers",
+                "Form study groups"
+            ],
+            "pakistan_resources": [
+                "HEC Digital Library: https://digitallibrary.edu.pk",
+                "Punjab IT Board e-Learn",
+                "Virtual University resources"
+            ],
+            "career_guidance": "Consider taking career assessment tests",
+            "scholarship_info": "Check HEC scholarship portal regularly",
+            "skill_development": [
+                "Coursera (financial aid available)",
+                "EdX free courses",
+                "Google Digital Garage"
+            ]
+        }
+    
+    def _business_solution(self, problem):
+        """Generate business solution"""
+        return {
+            "business_type": "Startup/Small Business",
+            "key_actions": [
+                "Register your business with SECP",
+                "Open a business bank account",
+                "Get NTN from FBR",
+                "Create a simple business plan"
+            ],
+            "pakistan_support": [
+                "Small and Medium Enterprises Development Authority (SMEDA)",
+                "Punjab Small Industries Corporation",
+                "Youth Entrepreneurship Scheme"
+            ],
+            "funding_options": [
+                "Bank loans (for established businesses)",
+                "Angel investors network",
+                "Government startup grants"
+            ],
+            "marketing_strategies": [
+                "Social media marketing (low cost)",
+                "Local networking events",
+                "Collaborate with complementary businesses"
+            ],
+            "estimated_costs": "PKR 50,000 - 500,000 depending on business type"
+        }
+    
+    def _technical_solution(self, problem):
+        """Generate technical solution"""
+        problem_lower = problem.lower()
+        
+        if any(word in problem_lower for word in ['wifi', 'internet', 'connection']):
             return {
-                'status': "Present day - Welcome to 2024!",
-                'era': 'Modern Information Age',
-                'world_population': '8.1 billion',
-                'dominant_technology': 'AI, Quantum Computing, Internet'
+                "issue": "Internet/WiFi Problem",
+                "troubleshooting_steps": [
+                    "1. Restart your router/modem",
+                    "2. Check if other devices can connect",
+                    "3. Move closer to router",
+                    "4. Change WiFi channel in router settings",
+                    "5. Contact ISP if problem persists"
+                ],
+                "pakistan_isp_contacts": {
+                    "PTCL": "1218",
+                    "Nayatel": "111-111-111",
+                    "StormFiber": "111-111-666",
+                    "Transworld": "111-123-456"
+                }
             }
-        elif target_year < current_year:
-            return self._travel_to_past(target_year)
+        elif any(word in problem_lower for word in ['phone', 'mobile', 'device']):
+            return {
+                "issue": "Mobile Device Problem",
+                "solutions": [
+                    "Perform soft reset (restart)",
+                    "Clear app cache from settings",
+                    "Check for software updates",
+                    "Backup data and perform factory reset if severe"
+                ],
+                "service_centers": [
+                    "Apple: iSquare, Mac station",
+                    "Samsung: Authorized service centers",
+                    "Other brands: Hafeez Center, Lahore"
+                ]
+            }
         else:
-            return self._travel_to_future(target_year)
+            return {
+                "issue": "Technical Problem",
+                "general_solutions": [
+                    "Search error message online",
+                    "Check official documentation",
+                    "Join relevant online forums",
+                    "Contact technical support"
+                ]
+            }
     
-    def _travel_to_past(self, year):
-        """Travel to past with historical context"""
-        events = []
-        for event_name, event_data in self.HISTORICAL_DATABASE.items():
-            if abs(event_data['year'] - year) <= 50:  # Events within 50 years
-                events.append({
-                    'name': event_name,
-                    'year': event_data['year'],
-                    'description': event_data['description'],
-                    'time_difference': year - event_data['year']
-                })
-        
+    def _government_solution(self, problem):
+        """Generate government services solution"""
         return {
-            'status': f"Arrived in year {year}",
-            'era': self._get_historical_era(year),
-            'significant_events': sorted(events, key=lambda x: abs(x['time_difference']))[:5],
-            'world_population': self._estimate_population(year),
-            'dominant_technology': self._get_era_technology(year),
-            'warning': "Do not interfere with timeline!" if year > 1900 else ""
+            "service_type": "Government Service",
+            "common_services": [
+                "CNIC application/renewal - Visit NADRA center",
+                "Passport application - Visit passport office",
+                "Vehicle registration - Excise & Taxation office",
+                "Property registration - Registrar office"
+            ],
+            "online_portals": [
+                "NADRA: https://www.nadra.gov.pk",
+                "FBR: https://iris.fbr.gov.pk",
+                "Passport: https://onlinemrp.dgip.gov.pk",
+                "Excise & Taxation: https://excise.punjab.gov.pk"
+            ],
+            "required_documents": [
+                "Original CNIC",
+                "Recent photographs",
+                "Proof of address",
+                "Relevant application forms"
+            ],
+            "processing_time": "Varies from 1 day to 2 weeks",
+            "fees": "PKR 100 - 5,000 depending on service"
         }
     
-    def _travel_to_future(self, year):
-        """Travel to future with predictions"""
-        predictions = []
-        
-        # Generate plausible future predictions
-        if year <= 2050:
-            predictions = [
-                "AI assistants manage most daily tasks",
-                "Mars colony established with 1000 residents",
-                "Quantum internet connects entire planet",
-                "Universal basic income implemented globally",
-                "Flying cars common in major cities"
-            ]
-        elif year <= 2100:
-            predictions = [
-                "Human lifespan extended to 150 years",
-                "Dyson swarm construction begins around Sun",
-                "Conscious AI recognized as sentient beings",
-                "Climate change reversed through geoengineering",
-                "First interstellar probe launched"
-            ]
-        else:
-            predictions = [
-                "Human civilization Type I on Kardashev scale",
-                "Consciousness uploading available",
-                "Time travel becomes theoretically possible",
-                "Contact with extraterrestrial intelligence",
-                "Multiple post-human species exist"
-            ]
-        
+    def _agriculture_solution(self, problem):
+        """Generate agriculture solution"""
         return {
-            'status': f"Arrived in year {year}",
-            'civilization_level': self._calculate_kardashev_scale(year),
-            'predictions': predictions,
-            'probability_of_existence': max(0, 100 - (year - 2024) * 0.1),
-            'warning': "Future is probabilistic - this is one possible timeline"
+            "crop_type": "General Agriculture",
+            "seasonal_advice": [
+                "Rabbi season (Oct-Mar): Wheat, Barley, Gram",
+                "Kharif season (Apr-Sep): Rice, Cotton, Sugarcane"
+            ],
+            "government_support": [
+                "Kissan Card scheme",
+                "Subsidized fertilizers",
+                "Free agricultural advisory services"
+            ],
+            "market_prices": "Check local mandi rates daily",
+            "weather_advisory": "Follow Pakistan Meteorological Department updates",
+            "disease_prevention": [
+                "Use certified seeds",
+                "Practice crop rotation",
+                "Monitor for pests regularly"
+            ]
         }
     
-    def _get_historical_era(self, year):
-        """Determine historical era based on year"""
-        if year < -10000:
-            return "Paleolithic Age"
-        elif year < -3000:
-            return "Neolithic Age"
-        elif year < 500:
-            return "Ancient Civilizations"
-        elif year < 1500:
-            return "Middle Ages"
-        elif year < 1800:
-            return "Renaissance"
-        elif year < 1900:
-            return "Industrial Age"
-        elif year < 2000:
-            return "Modern Age"
-        else:
-            return "Information Age"
-    
-    def _estimate_population(self, year):
-        """Rough estimate of world population for given year"""
-        estimates = {
-            -10000: "1-10 million",
-            -3000: "14-20 million",
-            0: "170-400 million",
-            500: "190-210 million",
-            1000: "275-350 million",
-            1500: "425-540 million",
-            1800: "0.9-1.0 billion",
-            1900: "1.6 billion",
-            1950: "2.5 billion",
-            2000: "6.1 billion",
-            2024: "8.1 billion"
+    def _personal_solution(self, problem):
+        """Generate personal assistant solution"""
+        return {
+            "area": "Personal Development",
+            "daily_planning": [
+                "Set 3 main goals for the day",
+                "Use Pomodoro technique (25 min work, 5 min break)",
+                "Review progress at end of day"
+            ],
+            "finance_management": [
+                "Track all expenses for one month",
+                "Create basic budget (50% needs, 30% wants, 20% savings)",
+                "Start emergency fund (aim for 3-6 months expenses)"
+            ],
+            "health_tips": [
+                "30 minutes daily exercise",
+                "7-8 hours sleep",
+                "Balanced diet with local seasonal foods"
+            ],
+            "skill_development": "Spend 1 hour daily learning new skill"
         }
-        
-        # Find closest year in estimates
-        closest_year = min(estimates.keys(), key=lambda x: abs(x - year))
-        return estimates[closest_year]
     
-    def _get_era_technology(self, year):
-        """Describe dominant technology of era"""
-        if year < -3000:
-            return "Stone tools, fire"
-        elif year < 0:
-            return "Bronze, writing, wheel"
-        elif year < 500:
-            return "Iron, concrete, aqueducts"
-        elif year < 1500:
-            return "Windmills, printing press, gunpowder"
-        elif year < 1800:
-            return "Telescope, steam engine, newspapers"
-        elif year < 1900:
-            return "Telegraph, railroad, electricity"
-        elif year < 1950:
-            return "Radio, automobile, airplane"
-        elif year < 2000:
-            return "Television, computer, internet"
-        else:
-            return "Smartphones, AI, renewable energy"
-    
-    def _calculate_kardashev_scale(self, year):
-        """Estimate civilization level on Kardashev scale"""
-        future_tech = {
-            2050: "Type 0.8 - Planetary energy network",
-            2100: "Type 1.0 - Full planetary control",
-            2200: "Type 1.5 - Interplanetary civilization",
-            2300: "Type 2.0 - Stellar civilization",
-            2500: "Type 2.5 - Multi-star system control",
-            3000: "Type 3.0 - Galactic civilization"
+    def _general_solution(self, problem):
+        """General solution for uncategorized problems"""
+        return {
+            "approach": "General Problem Solving",
+            "steps": [
+                "1. Clearly define the problem",
+                "2. Break it into smaller parts",
+                "3. Research each part separately",
+                "4. Seek expert advice if needed",
+                "5. Implement solution step by step"
+            ],
+            "resources": [
+                "Google search with specific keywords",
+                "YouTube tutorials",
+                "Online forums (Reddit, Stack Exchange)",
+                "Local community groups"
+            ]
         }
+    
+    def _general_medical_advice(self, problem):
+        """General medical advice"""
+        return {
+            "important_note": "⚠️ This is AI-generated advice. Always consult a doctor for medical issues.",
+            "general_advice": [
+                "Describe symptoms clearly to doctor",
+                "Note when symptoms started",
+                "List any medications you're taking",
+                "Mention any allergies"
+            ],
+            "emergency_signs": [
+                "Difficulty breathing",
+                "Severe pain",
+                "High fever with rash",
+                "Loss of consciousness"
+            ],
+            "immediate_actions": [
+                "If emergency, go to nearest hospital",
+                "Otherwise, book appointment with GP",
+                "Keep hydrated and rest"
+            ]
+        }
+    
+    def generate_implementation_plan(self, solution, timeline_days=7):
+        """Generate step-by-step implementation plan"""
+        days = timeline_days
         
-        # Find appropriate level
-        for milestone, description in sorted(future_tech.items()):
-            if year <= milestone:
-                return description
+        plan = {}
+        for i in range(1, days + 1):
+            if i == 1:
+                plan[f"Day {i}"] = ["Research and gather information", "Make list of required resources"]
+            elif i == 2:
+                plan[f"Day {i}"] = ["Consult with relevant expert", "Finalize approach"]
+            elif i == 3:
+                plan[f"Day {i}"] = ["Start implementation", "Document progress"]
+            elif i <= days - 2:
+                plan[f"Day {i}"] = ["Continue implementation", "Make adjustments as needed"]
+            elif i == days - 1:
+                plan[f"Day {i}"] = ["Review progress", "Fix any issues"]
+            else:
+                plan[f"Day {i}"] = ["Final review", "Document learnings", "Plan next steps"]
         
-        return "Type 3.5+ - Beyond galactic scale"
+        return plan
+    
+    def format_solution_for_display(self, solution, problem_text):
+        """Format solution for beautiful display"""
+        formatted = f"## 🔍 **Problem Analysis**\n\n"
+        formatted += f"*Problem:* {problem_text}\n\n"
+        formatted += f"## 🎯 **Recommended Solution**\n\n"
+        
+        for key, value in solution.items():
+            if isinstance(value, list):
+                formatted += f"### {key.replace('_', ' ').title()}:\n"
+                for item in value:
+                    formatted += f"- {item}\n"
+                formatted += "\n"
+            elif isinstance(value, dict):
+                formatted += f"### {key.replace('_', ' ').title()}:\n"
+                for sub_key, sub_value in value.items():
+                    formatted += f"**{sub_key.replace('_', ' ').title()}:** {sub_value}\n"
+                formatted += "\n"
+            else:
+                formatted += f"**{key.replace('_', ' ').title()}:** {value}\n\n"
+        
+        return formatted
 
-# ==================== UNIVERSAL PROBLEM SOLVER ====================
-class OmniscientProblemSolver:
-    """Solves any global problem instantly"""
+class ProblemTracker:
+    """Track user problems and solutions"""
     
-    PROBLEM_DATABASE = {
-        'world_hunger': {
-            'description': '800 million people lack sufficient food',
-            'solution': 'Implement global food blockchain with AI distribution',
-            'resources_needed': '$300B/year',
-            'timeline': '5 years',
-            'success_probability': 0.95
-        },
-        'climate_change': {
-            'description': 'Global temperatures rising 0.2°C per decade',
-            'solution': 'Orbital sunshades + atmospheric carbon capture',
-            'resources_needed': '$50T total',
-            'timeline': '30 years',
-            'success_probability': 0.87
-        },
-        'global_conflicts': {
-            'description': '56 active armed conflicts worldwide',
-            'solution': 'AI-mediated diplomacy with economic incentives',
-            'resources_needed': '$10T reallocation',
-            'timeline': '10 years',
-            'success_probability': 0.78
-        },
-        'disease_pandemics': {
-            'description': 'Risk of pandemic killing 50M+ people',
-            'solution': 'Global immune system monitoring with nano-medicine',
-            'resources_needed': '$100B/year',
-            'timeline': '3 years',
-            'success_probability': 0.99
-        },
-        'energy_crisis': {
-            'description': 'Fossil fuels depletion in 50 years',
-            'solution': 'Orbital solar farms + fusion reactors',
-            'resources_needed': '$200T investment',
-            'timeline': '20 years',
-            'success_probability': 0.92
-        },
-        'water_scarcity': {
-            'description': '4 billion people face water shortage',
-            'solution': 'Atmospheric water generators + desalination',
-            'resources_needed': '$5T infrastructure',
-            'timeline': '15 years',
-            'success_probability': 0.96
-        },
-        'education_gap': {
-            'description': '260 million children not in school',
-            'solution': 'AI personalized tutors via satellite internet',
-            'resources_needed': '$50B/year',
-            'timeline': '7 years',
-            'success_probability': 0.98
-        },
-        'income_inequality': {
-            'description': 'Top 1% own 45% of global wealth',
-            'solution': 'Universal basic assets + AI wealth redistribution',
-            'resources_needed': 'Economic restructuring',
-            'timeline': '25 years',
-            'success_probability': 0.65
-        }
-    }
+    def __init__(self):
+        self.problems = []
     
-    @staticmethod
-    def parse_resource_string(resource_str):
-        """
-        Convert resource strings like '$1.5T' or '$2B' to float values.
-        Supports suffixes: K (thousand), M (million), B (billion), T (trillion), A (quadrillion)
-        """
-        if not resource_str or not isinstance(resource_str, str):
-            return 0.0
-        
-        # Clean the string
-        s = resource_str.strip().upper().replace('$', '').replace(',', '')
-        
-        # If it's not a numeric string, return 0
-        if s == '':
-            return 0.0
-            
-        # Define multipliers
-        multipliers = {
-            'K': 1e3,
-            'M': 1e6,
-            'B': 1e9,
-            'T': 1e12,
-            'A': 1e15  # quadrillion
-        }
-        
-        # Remove any non-numeric prefixes and suffixes
-        # Extract numeric part and suffix
-        match = re.match(r'([0-9]+\.?[0-9]*)([KMBTA]?)(?:/.*)?', s)
-        if match:
-            num_str = match.group(1)
-            suffix = match.group(2)
-            
-            try:
-                number = float(num_str)
-                if suffix in multipliers:
-                    return number * multipliers[suffix]
-                return number
-            except ValueError:
-                return 0.0
-        else:
-            # Try direct conversion
-            try:
-                return float(s)
-            except ValueError:
-                return 0.0
-    
-    def solve_problem(self, problem_name, resources_allocated=None):
-        """Solve any global problem instantly"""
-        if problem_name not in self.PROBLEM_DATABASE:
-            return self._generate_novel_solution(problem_name)
-        
-        problem = self.PROBLEM_DATABASE[problem_name].copy()
-        
-        # Adjust solution based on resources
-        if resources_allocated:
-            base_amount = self.parse_resource_string(problem['resources_needed'])
-            if base_amount > 0:
-                factor = resources_allocated / base_amount
-                problem['success_probability'] = min(0.99, problem['success_probability'] * min(factor, 2.0))
-                timeline_years = int(problem['timeline'].split()[0])
-                problem['timeline'] = f"{max(1, int(timeline_years / max(1, factor)))} years"
-        
-        # Generate implementation plan
-        problem['implementation_plan'] = self._generate_implementation_plan(problem_name)
-        problem['key_milestones'] = self._generate_milestones(problem_name)
-        problem['potential_roadblocks'] = self._identify_roadblocks(problem_name)
-        
-        return problem
-    
-    def _generate_novel_solution(self, problem_name):
-        """Generate solution for unknown problem"""
-        return {
-            'solution': f'Quantum AI analysis suggests {problem_name.replace("_", " ")} requires systemic transformation',
-            'resources_needed': '$1T',
-            'timeline': '10 years',
-            'success_probability': 0.75,
-            'implementation_plan': {'phase1': 'Research phase', 'phase2': 'Pilot testing', 'phase3': 'Global rollout'},
-            'key_milestones': ['Year 1: Research', 'Year 3: Prototype', 'Year 5: Scale-up'],
-            'potential_roadblocks': ['Political resistance', 'Funding gaps', 'Technological barriers']
-        }
-    
-    def _generate_implementation_plan(self, problem_name):
-        """Generate detailed implementation plan"""
-        plans = {
-            'world_hunger': {
-                'phase1': 'Establish global food distribution network',
-                'phase2': 'Deploy AI-powered agricultural optimization',
-                'phase3': 'Implement blockchain food tracking',
-                'phase4': 'Scale to 100% coverage'
-            },
-            'climate_change': {
-                'phase1': 'Deploy orbital sunshades',
-                'phase2': 'Build atmospheric carbon capture facilities',
-                'phase3': 'Transition to renewable energy globally',
-                'phase4': 'Geoengineering optimization'
-            },
-            'global_conflicts': {
-                'phase1': 'AI-mediated peace negotiations',
-                'phase2': 'Economic incentive programs',
-                'phase3': 'Cultural exchange initiatives',
-                'phase4': 'Global peace monitoring'
-            }
-        }
-        
-        return plans.get(problem_name, {
-            'phase1': 'Initial research and feasibility study',
-            'phase2': 'Pilot implementation in test regions',
-            'phase3': 'Scale to global implementation',
-            'phase4': 'Ongoing optimization and maintenance'
+    def add_problem(self, category, problem, solution):
+        """Add problem to tracker"""
+        self.problems.append({
+            "timestamp": datetime.now(),
+            "category": category,
+            "problem": problem,
+            "solution": solution,
+            "resolved": False
         })
     
-    def _generate_milestones(self, problem_name):
-        """Generate key milestones for problem solution"""
-        milestones = {
-            'world_hunger': [
-                'Year 1: 10% reduction in hunger',
-                'Year 3: 50% reduction in hunger',
-                'Year 5: Zero hunger achieved'
-            ],
-            'climate_change': [
-                'Year 5: Carbon neutral',
-                'Year 15: Negative emissions',
-                'Year 30: Climate restored'
-            ],
-            'global_conflicts': [
-                'Year 2: 25% reduction in conflicts',
-                'Year 5: 60% reduction in conflicts',
-                'Year 10: Lasting peace established'
-            ]
+    def get_stats(self):
+        """Get statistics"""
+        if not self.problems:
+            return {"total": 0, "resolved": 0, "categories": {}}
+        
+        stats = {
+            "total": len(self.problems),
+            "resolved": sum(1 for p in self.problems if p["resolved"]),
+            "categories": {}
         }
         
-        return milestones.get(problem_name, [
-            'Year 1: Project initiation',
-            'Year 3: Major milestones achieved',
-            'Year 5: Full implementation'
-        ])
-    
-    def _identify_roadblocks(self, problem_name):
-        """Identify potential roadblocks for problem solution"""
-        roadblocks = {
-            'world_hunger': ['Logistical challenges', 'Political instability', 'Climate variability'],
-            'climate_change': ['Economic costs', 'International cooperation', 'Technological limits'],
-            'global_conflicts': ['Historical grievances', 'Resource competition', 'Ideological differences']
-        }
+        for problem in self.problems:
+            cat = problem["category"]
+            stats["categories"][cat] = stats["categories"].get(cat, 0) + 1
         
-        return roadblocks.get(problem_name, [
-            'Funding limitations',
-            'Political resistance',
-            'Technological barriers',
-            'Public acceptance'
-        ])
+        return stats
 
-# ==================== HELPER FUNCTIONS ====================
-def format_large_number(num):
-    """Format large numbers with K, M, B, T suffixes"""
-    if num >= 1e15:
-        return f"${num/1e15:.1f}Q"
-    elif num >= 1e12:
-        return f"${num/1e12:.1f}T"
-    elif num >= 1e9:
-        return f"${num/1e9:.1f}B"
-    elif num >= 1e6:
-        return f"${num/1e6:.1f}M"
-    elif num >= 1e3:
-        return f"${num/1e3:.1f}K"
-    else:
-        return f"${num:,.0f}"
-
-# ==================== MAIN APPLICATION ====================
 def main():
-    # Page configuration
-    st.set_page_config(
-        page_title="🧠 TERRA COGNITA - Digital Twin of Earth",
-        page_icon="🌍",
-        layout="wide",
-        initial_sidebar_state="expanded"
-    )
+    """Main Application"""
     
-    # Custom CSS for futuristic interface
-    st.markdown("""
-    <style>
-        .title-glitch {
-            font-size: 4rem;
-            font-weight: 900;
-            text-align: center;
-            color: #0ff;
-            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
-            animation: glitch 3s infinite;
-        }
-        @keyframes glitch {
-            0% { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff; }
-            50% { text-shadow: 0 0 10px #f0f, 0 0 20px #f0f, 0 0 30px #f0f; }
-            100% { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff; }
-        }
-        
-        .neural-pulse {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            border-radius: 15px;
-            color: white;
-            border: 2px solid #0ff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.6); }
-            100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
-        }
-        
-        .time-travel-card {
-            background: linear-gradient(135deg, #000428 0%, #004e92 100%);
-            padding: 25px;
-            border-radius: 15px;
-            color: white;
-            border: 1px solid #00ff9d;
-            margin: 10px 0;
-        }
-        
-        .problem-solver {
-            background: linear-gradient(135deg, #ff0080 0%, #ff8c00 100%);
-            padding: 20px;
-            border-radius: 15px;
-            color: white;
-        }
-        
-        .metric-hologram {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 255, 0.5);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-        }
-        
-        .stButton>button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .stButton>button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .success-box {
-            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            margin: 10px 0;
-        }
-        
-        .warning-box {
-            background: linear-gradient(135deg, #f46b45 0%, #eea849 100%);
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            margin: 10px 0;
-        }
-        
-        .stTabs [data-baseweb="tab-list"] {
-            gap: 10px;
-        }
-        
-        .stTabs [data-baseweb="tab"] {
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 10px 10px 0 0;
-            padding: 10px 20px;
-            font-weight: bold;
-        }
-        
-        .stTabs [aria-selected="true"] {
-            background-color: rgba(0,255,255,0.2) !important;
-        }
-    </style>
-    """, unsafe_allow_html=True)
+    # Initialize session state
+    if 'ai_assistant' not in st.session_state:
+        st.session_state.ai_assistant = AISparkAssistant()
+    if 'problem_tracker' not in st.session_state:
+        st.session_state.problem_tracker = ProblemTracker()
+    if 'chat_history' not in st.session_state:
+        st.session_state.chat_history = []
     
-    # Title
-    st.markdown('<h1 class="title-glitch">🧠 TERRA COGNITA</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align:center; color:#aaa; font-size:1.5rem;">Digital Twin of Earth • Planetary Nervous System • Time Travel Interface</p>', unsafe_allow_html=True)
+    ai = st.session_state.ai_assistant
+    tracker = st.session_state.problem_tracker
     
-    # Initialize systems
-    if 'quantum_sim' not in st.session_state:
-        st.session_state.quantum_sim = QuantumCivilizationSimulator()
-    if 'planet_monitor' not in st.session_state:
-        st.session_state.planet_monitor = PlanetaryNervousSystem()
-    if 'time_travel' not in st.session_state:
-        st.session_state.time_travel = ChronoNavigator()
-    if 'problem_solver' not in st.session_state:
-        st.session_state.problem_solver = OmniscientProblemSolver()
-    
-    quantum_sim = st.session_state.quantum_sim
-    planet_monitor = st.session_state.planet_monitor
-    time_travel = st.session_state.time_travel
-    problem_solver = st.session_state.problem_solver
+    # Header
+    st.markdown('<h1 class="main-header">🤖 AI-SPARK</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-header">Pakistan\'s First Universal AI Assistant • Real-Time Problem Solving • 100% Free</p>', unsafe_allow_html=True)
     
     # Sidebar
     with st.sidebar:
         st.image("https://cdn-icons-png.flaticon.com/512/3067/3067256.png", width=100)
-        st.markdown("### 🎮 Control Interface")
+        st.markdown("### 📊 Dashboard")
         
-        # User role
-        user_role = st.selectbox(
-            "Select Your Role",
-            ["🌍 Planetary Overseer", "⏰ Time Navigator", "🎯 Problem Solver", 
-             "🤖 AI Symbiote", "🧬 Future Architect", "📡 Cosmic Observer"]
-        )
+        stats = tracker.get_stats()
         
-        # Access level
-        access_level = st.select_slider(
-            "Access Level",
-            ["Civilian", "Researcher", "Government", "AI Council", "Planetary Admin", "Cosmic"]
-        )
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Problems Solved", stats["total"])
+        with col2:
+            if stats["total"] > 0:
+                st.metric("Resolved", stats["resolved"])
+            else:
+                st.metric("Resolved", 0)
         
-        # Simulation speed
-        sim_speed = st.slider("Simulation Speed", 1, 1000000, 1000, 
-                             help="Years simulated per second")
+        st.markdown("---")
+        st.markdown("### 🎯 Quick Categories")
         
-        # Reality filters
-        st.markdown("### 🔍 Reality Filters")
-        show_future = st.checkbox("Show Probable Futures", True)
-        show_past = st.checkbox("Show Historical Layers", True)
-        show_quantum = st.checkbox("Show Quantum Superpositions", False)
-        show_ai_thoughts = st.checkbox("Show AI Reasoning", True)
+        # Category buttons
+        categories_grid = st.columns(3)
+        categories = list(AI_MODULES.keys())[:6]  # First 6 categories
         
-        # Reset button
-        if st.button("🔄 Reset Simulation", type="secondary"):
-            st.session_state.clear()
-            st.rerun()
+        for idx, cat in enumerate(categories):
+            with categories_grid[idx % 3]:
+                if st.button(AI_MODULES[cat]["icon"], help=AI_MODULES[cat]["name"], use_container_width=True):
+                    st.session_state.selected_category = cat
+                    st.rerun()
+        
+        st.markdown("---")
+        st.markdown("### 🚨 Emergency Info (Pakistan)")
+        
+        with st.expander("Emergency Numbers"):
+            for service, number in PAKISTAN_DATA["emergency_numbers"].items():
+                st.write(f"**{service}:** `{number}`")
+        
+        with st.expander("Government Websites"):
+            for dept, url in PAKISTAN_DATA["government_websites"].items():
+                st.write(f"[{dept}]({url})")
+        
+        st.markdown("---")
+        st.markdown("Made with ❤️ in Pakistan")
     
-    # Main tabs
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        "🏠 Planetary Dashboard", 
-        "⏰ Time Navigator", 
-        "🎯 Universal Solver", 
-        "🧠 Neural Network", 
-        "🌌 Cosmic View", 
-        "⚙️ Reality Engine"
+    # Main Tabs
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "🏠 Home", 
+        "💬 Problem Solver", 
+        "📊 Progress Tracker", 
+        "📚 Resources", 
+        "🆘 Emergency Help"
     ])
     
     with tab1:
-        # Planetary Vital Signs
-        st.markdown("### 🌡️ Planetary Vital Signs")
+        # Hero Section
+        st.markdown("## 🚀 Welcome to AI-SPARK!")
+        st.markdown("""
+        Your personal AI assistant for solving **real-world problems** in Pakistan. 
+        From medical advice to business guidance, technical issues to legal matters - 
+        we've got you covered!
+        """)
         
-        vital_signs = planet_monitor.calculate_global_vital_signs()
+        # Features Grid
+        st.markdown("## 🔥 Key Features")
         
-        col1, col2, col3, col4 = st.columns(4)
+        features_cols = st.columns(3)
+        
+        with features_cols[0]:
+            st.markdown("""
+            <div class="card">
+                <div class="card-icon">🏥</div>
+                <h3>Medical Assistant</h3>
+                <p>Symptom checking, medicine info, doctor recommendations</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with features_cols[1]:
+            st.markdown("""
+            <div class="card">
+                <div class="card-icon">⚖️</div>
+                <h3>Legal Assistant</h3>
+                <p>Legal advice, document review, lawyer matching</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with features_cols[2]:
+            st.markdown("""
+            <div class="card">
+                <div class="card-icon">🎓</div>
+                <h3>Education Assistant</h3>
+                <p>Homework help, career guidance, scholarship finder</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        features_cols2 = st.columns(3)
+        
+        with features_cols2[0]:
+            st.markdown("""
+            <div class="card">
+                <div class="card-icon">💼</div>
+                <h3>Business Assistant</h3>
+                <p>Business plans, market analysis, funding guidance</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with features_cols2[1]:
+            st.markdown("""
+            <div class="card">
+                <div class="card-icon">💻</div>
+                <h3>Technical Assistant</h3>
+                <p>Code debugging, tech solutions, device troubleshooting</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with features_cols2[2]:
+            st.markdown("""
+            <div class="card">
+                <div class="card-icon">🏛️</div>
+                <h3>Government Services</h3>
+                <p>Form filling, service info, complaint registration</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # Quick Start
+        st.markdown("## ⚡ Quick Start")
+        col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown(f"""
-            <div class="metric-hologram">
-                <h4>💓 Civilization Pulse</h4>
-                <h2>{vital_signs['heartbeat']:.0f} BPM</h2>
-                <p>Global neural activity</p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown("""
+            ### 🎯 How to Use:
+            1. **Select your problem category**
+            2. **Describe your problem in detail**
+            3. **Get AI-powered solution**
+            4. **Follow step-by-step guide**
+            5. **Track your progress**
+            """)
         
         with col2:
-            st.markdown(f"""
-            <div class="metric-hologram">
-                <h4>🌡️ Planetary Temperature</h4>
-                <h2>{vital_signs['temperature']:.1f}°C</h2>
-                <p>Average global</p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown("""
+            ### 💡 Pro Tips:
+            - Be specific about your problem
+            - Include relevant details
+            - Follow the implementation plan
+            - Save important solutions
+            - Share with friends who need help
+            """)
         
-        with col3:
-            st.markdown(f"""
-            <div class="metric-hologram">
-                <h4>🧠 Neural Activity</h4>
-                <h2>{vital_signs['neural_activity']*100:.1f}%</h2>
-                <p>Collective consciousness</p>
-            </div>
-            """, unsafe_allow_html=True)
+        # Stats
+        st.markdown("## 📈 Real-time Statistics")
+        stat_cols = st.columns(4)
         
-        with col4:
-            bp_systolic, bp_diastolic = vital_signs['blood_pressure']
-            st.markdown(f"""
-            <div class="metric-hologram">
-                <h4>🩸 Civilization Pressure</h4>
-                <h2>{bp_systolic:.0f}/{bp_diastolic:.0f}</h2>
-                <p>Systolic/Diastolic stress</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        # Live Activity Map
-        st.markdown("### 🎪 Live Planetary Activity")
-        
-        # Generate live activity data
-        activity_data = []
-        for _ in range(100):
-            activity_data.append({
-                'lat': np.random.uniform(-90, 90),
-                'lon': np.random.uniform(-180, 180),
-                'activity': np.random.uniform(0, 100),
-                'type': np.random.choice(['Economic', 'Social', 'Political', 'Environmental', 'Technological'])
-            })
-        
-        activity_df = pd.DataFrame(activity_data)
-        
-        try:
-            fig = px.density_mapbox(activity_df, lat='lat', lon='lon', z='activity',
-                                   radius=20, zoom=1,
-                                   mapbox_style="stamen-toner",
-                                   title='Real-time Global Neural Activity',
-                                   height=600)
-            
-            st.plotly_chart(fig, use_container_width=True)
-        except Exception as e:
-            st.warning(f"Map visualization error: {str(e)}")
-            st.info("Showing data table instead:")
-            st.dataframe(activity_df.head(10), use_container_width=True)
-        
-        # Civilization Health Monitor
-        st.markdown("### 📊 Civilization Health Dashboard")
-        
-        # Simulate civilization metrics
-        metrics = pd.DataFrame({
-            'Metric': ['Technological Progress', 'Social Cohesion', 'Environmental Health', 
-                      'Economic Stability', 'Political Peace', 'Cultural Vitality', 
-                      'Educational Attainment', 'Healthcare Access', 'Resource Distribution'],
-            'Current': [78, 65, 42, 71, 58, 69, 75, 68, 45],
-            'Trend': ['↑', '→', '↓', '↑', '→', '↑', '↑', '↑', '↓'],
-            'Target': [90, 80, 85, 85, 80, 85, 90, 90, 80]
-        })
-        
-        # Create radar chart
-        try:
-            fig = go.Figure(data=go.Scatterpolar(
-                r=metrics['Current'],
-                theta=metrics['Metric'],
-                fill='toself',
-                name='Current Status'
-            ))
-            
-            fig.add_trace(go.Scatterpolar(
-                r=metrics['Target'],
-                theta=metrics['Metric'],
-                fill='toself',
-                name='Target'
-            ))
-            
-            fig.update_layout(
-                polar=dict(
-                    radialaxis=dict(
-                        visible=True,
-                        range=[0, 100]
-                    )),
-                showlegend=True,
-                height=500,
-                title="Civilization Health Radar"
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
-        except Exception as e:
-            st.error(f"Radar chart error: {str(e)}")
-            st.dataframe(metrics, use_container_width=True)
+        with stat_cols[0]:
+            st.metric("Active Users", "1,234", "+123 today")
+        with stat_cols[1]:
+            st.metric("Problems Solved", "5,678", "+45 today")
+        with stat_cols[2]:
+            st.metric("Success Rate", "92%", "+2%")
+        with stat_cols[3]:
+            st.metric("Avg. Resolution Time", "2.3 hrs", "-0.5 hrs")
     
     with tab2:
-        st.markdown("### ⏰ Time Navigation Interface")
+        st.markdown("## 💬 AI Problem Solver")
         
-        col1, col2 = st.columns([2, 1])
+        # Category Selection
+        st.markdown("### 1️⃣ Select Problem Category")
         
-        with col1:
-            # Time travel controls
-            st.markdown("#### 🕰️ Set Destination Year")
-            
-            travel_mode = st.radio(
-                "Travel Mode",
-                ["Historical (Past)", "Present", "Future", "Alternate Realities"],
-                horizontal=True
-            )
-            
-            if travel_mode == "Historical (Past)":
-                target_year = st.slider("Select Year", -10000, 2023, 500)
-            elif travel_mode == "Future":
-                target_year = st.slider("Select Year", 2025, 10000, 2050)
-            elif travel_mode == "Alternate Realities":
-                reality = st.selectbox("Select Alternate Reality", [
-                    "Hitler Won WWII",
-                    "Roman Empire Never Fell",
-                    "Dinosaurs Survived",
-                    "AI Took Over in 2000",
-                    "Cold War Went Hot",
-                    "No Industrial Revolution",
-                    "China Discovered America",
-                    "Internet Never Invented",
-                    "Renewable Energy Dominant from 1900",
-                    "Global Government Since 1945"
-                ])
-            else:
-                target_year = datetime.now().year
-            
-            if travel_mode != "Alternate Realities":
-                if st.button("🚀 INITIATE TIME JUMP", type="primary", use_container_width=True):
-                    with st.spinner("Calibrating temporal coordinates..."):
-                        time.sleep(2)
-                        result = time_travel.travel_to_year(target_year)
-                        
-                        if isinstance(result, dict):
-                            st.markdown(f"""
-                            <div class="time-travel-card">
-                                <h3>⏳ {result['status']}</h3>
-                                {f"<p><strong>Era:</strong> {result.get('era', 'Unknown')}</p>"}
-                                {f"<p><strong>Civilization Level:</strong> {result.get('civilization_level', 'Unknown')}</p>" if 'civilization_level' in result else ""}
-                                {f"<p><strong>Population:</strong> {result.get('world_population', 'Unknown')}</p>"}
-                            </div>
-                            """, unsafe_allow_html=True)
-                            
-                            if 'significant_events' in result:
-                                st.markdown("#### 📜 Significant Historical Events")
-                                for event in result['significant_events']:
-                                    st.write(f"• **{abs(event['time_difference'])} years {('before' if event['time_difference'] > 0 else 'after')}**: {event['description']}")
-                            
-                            if 'predictions' in result:
-                                st.markdown("#### 🔮 Future Predictions")
-                                for pred in result['predictions']:
-                                    st.write(f"• {pred}")
-                            
-                            if 'warning' in result and result['warning']:
-                                st.warning(result['warning'])
-                        else:
-                            st.info(result)
-            
-            else:
-                if st.button("🌀 LOAD ALTERNATE REALITY", type="primary", use_container_width=True):
-                    st.info(f"Loading reality: {reality}")
-                    time.sleep(1)
-                    
-                    # Generate alternate reality data
-                    reality_data = {
-                        "Hitler Won WWII": {
-                            "year": 2024,
-                            "description": "Third Reich controls Europe, Japan controls Asia",
-                            "technology": "Advanced but militaristic, no internet",
-                            "population": "6.2 billion (controlled growth)",
-                            "key_features": ["Fascist world government", "No civil rights", "Space program focused on weapons"]
-                        },
-                        "Roman Empire Never Fell": {
-                            "year": 2024,
-                            "description": "Roman Empire expanded to global scale",
-                            "technology": "Steampunk-like advanced mechanics",
-                            "population": "4.8 billion (controlled by empire)",
-                            "key_features": ["Latin global language", "Gladiator sports still popular", "No nation-states"]
-                        }
-                    }
-                    
-                    data = reality_data.get(reality, {
-                        "year": 2024,
-                        "description": "An alternate timeline where major historical events unfolded differently",
-                        "technology": "Advanced but different technological tree",
-                        "population": "Varies significantly",
-                        "key_features": ["Different social structures", "Alternative energy sources", "Unique cultural developments"]
-                    })
-                    
-                    st.markdown(f"""
-                    <div class="time-travel-card">
-                        <h3>🌀 Alternate Reality: {reality}</h3>
-                        <p><strong>Year:</strong> {data['year']}</p>
-                        <p><strong>Description:</strong> {data['description']}</p>
-                        <p><strong>Technology Level:</strong> {data['technology']}</p>
-                        <p><strong>Global Population:</strong> {data['population']}</p>
-                        <p><strong>Key Features:</strong></p>
-                        <ul>
-                            {"".join([f"<li>{feature}</li>" for feature in data['key_features']])}
-                        </ul>
-                    </div>
-                    """, unsafe_allow_html=True)
+        categories = st.columns(4)
+        category_keys = list(AI_MODULES.keys())
         
-        with col2:
-            st.markdown("#### 📅 Quick Time Jumps")
-            
-            time_buttons = st.container()
-            with time_buttons:
-                cols = st.columns(2)
-                
-                with cols[0]:
-                    if st.button("🦖 Dinosaur Era", use_container_width=True):
-                        st.session_state.time_target = -66000000
-                        st.info("Jumping to 66 million years ago...")
-                    
-                    if st.button("🏛️ Ancient Rome", use_container_width=True):
-                        st.session_state.time_target = 100
-                        st.info("Jumping to 100 CE...")
-                    
-                    if st.button("⚔️ Middle Ages", use_container_width=True):
-                        st.session_state.time_target = 1300
-                        st.info("Jumping to 1300 CE...")
-                    
-                    if st.button("🏭 Industrial Rev", use_container_width=True):
-                        st.session_state.time_target = 1800
-                        st.info("Jumping to 1800 CE...")
-                
-                with cols[1]:
-                    if st.button("📱 Year 2000", use_container_width=True):
-                        st.session_state.time_target = 2000
-                        st.info("Jumping to 2000 CE...")
-                    
-                    if st.button("🚀 Year 2050", use_container_width=True):
-                        st.session_state.time_target = 2050
-                        st.info("Jumping to 2050 CE...")
-                    
-                    if st.button("🛸 Year 2100", use_container_width=True):
-                        st.session_state.time_target = 2100
-                        st.info("Jumping to 2100 CE...")
-                    
-                    if st.button("🌌 Year 3000", use_container_width=True):
-                        st.session_state.time_target = 3000
-                        st.info("Jumping to 3000 CE...")
-            
-            # Timeline visualization
-            st.markdown("#### 📜 Human Timeline")
-            
-            try:
-                timeline_fig = go.Figure()
-                
-                # Add timeline events
-                events = [
-                    {"year": -66000000, "event": "Dinosaurs Extinct", "importance": 10},
-                    {"year": -10000, "event": "Agriculture Begins", "importance": 9},
-                    {"year": -3000, "event": "Pyramids Built", "importance": 8},
-                    {"year": 0, "event": "Common Era", "importance": 7},
-                    {"year": 1450, "event": "Printing Press", "importance": 9},
-                    {"year": 1760, "event": "Industrial Rev", "importance": 10},
-                    {"year": 1969, "event": "Moon Landing", "importance": 9},
-                    {"year": 2024, "event": "Present Day", "importance": 10},
-                    {"year": 2050, "event": "Mars Colony", "importance": 8},
-                    {"year": 2100, "event": "Dyson Swarm", "importance": 7},
-                ]
-                
-                for ev in events:
-                    timeline_fig.add_trace(go.Scatter(
-                        x=[ev["year"]],
-                        y=[ev["importance"]],
-                        mode='markers+text',
-                        marker=dict(size=15, color='blue'),
-                        text=[ev["event"]],
-                        textposition="top center",
-                        name=ev["event"]
-                    ))
-                
-                timeline_fig.update_layout(
-                    title="Human Civilization Timeline",
-                    xaxis_title="Year",
-                    yaxis_title="Historical Importance",
-                    height=400,
-                    showlegend=False
-                )
-                
-                st.plotly_chart(timeline_fig, use_container_width=True)
-            except Exception as e:
-                st.error(f"Timeline error: {str(e)}")
-    
-    with tab3:
-        st.markdown("### 🎯 Universal Problem Solver")
+        selected_category = st.session_state.get('selected_category', 'medical')
         
-        # Problem selection
-        problem = st.selectbox(
-            "Select Global Problem to Solve",
-            list(problem_solver.PROBLEM_DATABASE.keys()),
-            format_func=lambda x: x.replace('_', ' ').title()
+        for idx in range(0, len(category_keys), 4):
+            cols = st.columns(4)
+            for j in range(4):
+                if idx + j < len(category_keys):
+                    cat_key = category_keys[idx + j]
+                    cat_data = AI_MODULES[cat_key]
+                    
+                    with cols[j]:
+                        if st.button(
+                            f"{cat_data['icon']} {cat_data['name'].split()[1]}",
+                            use_container_width=True,
+                            type="primary" if cat_key == selected_category else "secondary"
+                        ):
+                            selected_category = cat_key
+                            st.session_state.selected_category = cat_key
+                            st.rerun()
+        
+        # Problem Input
+        st.markdown(f"### 2️⃣ Describe Your {AI_MODULES[selected_category]['name']} Problem")
+        
+        problem_text = st.text_area(
+            "Be specific and include all relevant details:",
+            height=150,
+            placeholder=f"Example: I have fever for 2 days, temperature is 101°F..."
+            if selected_category == "medical" else
+            f"Describe your {selected_category} problem in detail..."
         )
         
-        if problem:
-            problem_info = problem_solver.PROBLEM_DATABASE[problem]
+        # Additional Details
+        with st.expander("📋 Additional Details (Optional)"):
+            col1, col2 = st.columns(2)
             
-            st.markdown(f"""
-            <div class="problem-solver">
-                <h3>🔍 {problem.replace('_', ' ').title()}</h3>
-                <p><strong>Description:</strong> {problem_info['description']}</p>
-                <p><strong>Current Status:</strong> 🚨 Critical</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Resource allocation
-            st.markdown("#### 💰 Resource Allocation")
-            
-            col_res1, col_res2 = st.columns(2)
-            
-            with col_res1:
-                # Parse the resource string properly
-                default_value = problem_solver.parse_resource_string(problem_info['resources_needed'])
-                
-                resources = st.number_input(
-                    "Allocate Resources ($)",
-                    min_value=1.0,
-                    max_value=1e18,  # Increased to allow for trillion-dollar values
-                    value=default_value,
-                    step=1000000000.0,  # Step of 1 billion
-                    format="%.0f"
+            with col1:
+                location = st.selectbox(
+                    "Your City",
+                    ["Select city"] + PAKISTAN_DATA["cities"]
                 )
-                
-                resources_display = format_large_number(resources)
-                st.info(f"Allocated: {resources_display}")
             
-            with col_res2:
-                timeline = st.slider("Preferred Timeline (years)", 1, 100, 
-                                    int(problem_info['timeline'].split()[0]))
+            with col2:
+                urgency = st.select_slider(
+                    "Urgency Level",
+                    ["Low", "Medium", "High", "Critical"]
+                )
             
-            # Solve button
-            if st.button("⚡ SOLVE THIS PROBLEM", type="primary", use_container_width=True):
-                with st.spinner("Running quantum optimization algorithms..."):
-                    time.sleep(2)
+            budget = st.slider("Approximate Budget (PKR)", 0, 1000000, 10000, 1000)
+            
+            timeline = st.selectbox(
+                "Preferred Timeline",
+                ["Immediate", "Within a week", "Within a month", "Flexible"]
+            )
+        
+        # Solve Button
+        if st.button("🚀 GET AI SOLUTION", type="primary", use_container_width=True):
+            if problem_text.strip():
+                with st.spinner(f"🤖 Analyzing your {selected_category} problem..."):
+                    time.sleep(1)
                     
-                    try:
-                        solution = problem_solver.solve_problem(problem, resources)
-                        
-                        st.success("✅ Solution Generated!")
-                        
-                        # Display solution
+                    # Get solution
+                    solution = ai.analyze_problem(problem_text, selected_category)
+                    
+                    # Track problem
+                    tracker.add_problem(selected_category, problem_text, solution)
+                    
+                    # Display solution
+                    st.success("✅ Solution Generated!")
+                    
+                    # Solution display
+                    st.markdown("---")
+                    st.markdown(f'<div class="solution-box"><h3>✨ AI-Generated Solution</h3></div>', unsafe_allow_html=True)
+                    
+                    formatted_solution = ai.format_solution_for_display(solution, problem_text)
+                    st.markdown(formatted_solution)
+                    
+                    # Implementation Plan
+                    st.markdown("---")
+                    st.markdown("## 📋 Implementation Plan")
+                    
+                    plan_days = st.slider("Plan duration (days)", 1, 30, 7)
+                    implementation_plan = ai.generate_implementation_plan(solution, plan_days)
+                    
+                    for day, tasks in implementation_plan.items():
+                        with st.expander(f"{day}: {tasks[0]}"):
+                            for task in tasks:
+                                st.write(f"• {task}")
+                    
+                    # Resources
+                    st.markdown("---")
+                    st.markdown("## 🔗 Helpful Resources")
+                    
+                    resource_cols = st.columns(2)
+                    
+                    with resource_cols[0]:
+                        st.markdown("### 📞 Local Contacts")
+                        if selected_category == "medical":
+                            st.write("""
+                            - **Aga Khan Hospital:** 021-111-911-911
+                            - **Shaukat Khanum:** 042-111-911-911
+                            - **Jinnah Hospital:** 042-992-313-00
+                            """)
+                        elif selected_category == "legal":
+                            st.write("""
+                            - **District Bar Association:** Visit local office
+                            - **Legal Aid:** 0800-66666
+                            - **Police Complaint:** 15 or 8787
+                            """)
+                    
+                    with resource_cols[1]:
+                        st.markdown("### 🌐 Online Resources")
+                        st.write("""
+                        - **Government Portal:** [Pakistan.gov.pk](https://www.pakistan.gov.pk)
+                        - **Consumer Protection:** [Punjab Consumer Protection Council](https://pcpc.punjab.gov.pk)
+                        - **Emergency Services:** Rescue 1122
+                        """)
+                    
+                    # Download option
+                    st.markdown("---")
+                    st.markdown("### 💾 Save Solution")
+                    
+                    solution_data = {
+                        "problem": problem_text,
+                        "category": selected_category,
+                        "solution": solution,
+                        "generated_at": datetime.now().isoformat(),
+                        "implementation_plan": implementation_plan
+                    }
+                    
+                    json_str = json.dumps(solution_data, indent=2, ensure_ascii=False)
+                    
+                    st.download_button(
+                        label="📥 Download Solution as JSON",
+                        data=json_str,
+                        file_name=f"ai_spark_solution_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                        mime="application/json"
+                    )
+            else:
+                st.error("Please describe your problem first!")
+    
+    with tab3:
+        st.markdown("## 📊 Your Progress Tracker")
+        
+        stats = tracker.get_stats()
+        
+        if stats["total"] > 0:
+            # Stats overview
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric("Total Problems", stats["total"])
+            
+            with col2:
+                resolution_rate = (stats["resolved"] / stats["total"] * 100) if stats["total"] > 0 else 0
+                st.metric("Resolution Rate", f"{resolution_rate:.1f}%")
+            
+            with col3:
+                st.metric("Active Issues", stats["total"] - stats["resolved"])
+            
+            # Category distribution
+            st.markdown("### 📈 Problem Categories")
+            
+            if stats["categories"]:
+                categories_df = pd.DataFrame({
+                    'Category': list(stats["categories"].keys()),
+                    'Count': list(stats["categories"].values())
+                })
+                
+                fig = px.pie(categories_df, values='Count', names='Category', 
+                            title='Problem Distribution by Category')
+                st.plotly_chart(fig, use_container_width=True)
+            
+            # Problem history
+            st.markdown("### 📝 Problem History")
+            
+            for idx, problem in enumerate(reversed(tracker.problems[-10:]), 1):
+                with st.expander(f"Problem #{len(tracker.problems) - idx + 1}: {problem['category'].title()} - {problem['timestamp'].strftime('%Y-%m-%d %H:%M')}"):
+                    st.write(f"**Problem:** {problem['problem'][:200]}...")
+                    st.write(f"**Category:** {problem['category'].title()}")
+                    st.write(f"**Status:** {'✅ Resolved' if problem['resolved'] else '🔄 In Progress'}")
+                    
+                    col_res1, col_res2 = st.columns(2)
+                    
+                    with col_res1:
+                        if not problem['resolved']:
+                            if st.button(f"Mark as Resolved", key=f"resolve_{idx}"):
+                                problem['resolved'] = True
+                                st.rerun()
+                    
+                    with col_res2:
+                        if st.button(f"View Solution", key=f"view_{idx}"):
+                            st.write("**Solution Summary:**")
+                            st.json(problem['solution'])
+        else:
+            st.info("No problems tracked yet. Go to the Problem Solver tab to get started!")
+            
+            # Sample progress visualization
+            st.markdown("### 📊 How Progress Tracking Works")
+            
+            sample_data = pd.DataFrame({
+                'Week': ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                'Problems Solved': [0, 2, 5, 8],
+                'Resolution Rate %': [0, 50, 70, 85]
+            })
+            
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=sample_data['Week'], y=sample_data['Problems Solved'],
+                                    mode='lines+markers', name='Problems Solved'))
+            fig.add_trace(go.Scatter(x=sample_data['Week'], y=sample_data['Resolution Rate %'],
+                                    mode='lines+markers', name='Resolution Rate %', yaxis='y2'))
+            
+            fig.update_layout(
+                title='Sample Progress Tracking',
+                yaxis=dict(title='Problems Solved'),
+                yaxis2=dict(title='Resolution Rate %', overlaying='y', side='right'),
+                height=400
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+    
+    with tab4:
+        st.markdown("## 📚 Free Resources & Templates")
+        
+        resource_categories = st.selectbox(
+            "Select Resource Category",
+            ["Medical", "Legal", "Education", "Business", "Technical", "Government", "All"]
+        )
+        
+        # Resource Database
+        RESOURCES = {
+            "Medical": [
+                {"name": "📋 Medical History Template", "desc": "Keep track of medical history", "download": True},
+                {"name": "💊 Medicine Tracker", "desc": "Track medications and dosage", "download": True},
+                {"name": "🏥 Hospital Checklist", "desc": "What to bring to hospital", "download": True},
+                {"name": "🌡️ Symptom Diary", "desc": "Daily symptom tracking template", "download": True},
+            ],
+            "Legal": [
+                {"name": "📄 Basic Agreement Template", "desc": "Simple legal agreement", "download": True},
+                {"name": "⚖️ Consumer Complaint Form", "desc": "For product/service complaints", "download": True},
+                {"name": "📝 Rental Agreement", "desc": "Basic house rental agreement", "download": True},
+                {"name": "📑 Affidavit Template", "desc": "For sworn statements", "download": True},
+            ],
+            "Education": [
+                {"name": "📓 Study Planner", "desc": "Weekly study schedule", "download": True},
+                {"name": "🎯 Career Planning Worksheet", "desc": "Plan your career path", "download": True},
+                {"name": "💰 Scholarship Tracker", "desc": "Track scholarship applications", "download": True},
+                {"name": "📚 Research Template", "desc": "Academic research organization", "download": True},
+            ],
+            "Business": [
+                {"name": "📊 Business Plan Template", "desc": "Complete business plan", "download": True},
+                {"name": "💰 Expense Tracker", "desc": "Business expense tracking", "download": True},
+                {"name": "📈 Financial Projections", "desc": "3-year financial projections", "download": True},
+                {"name": "📋 Startup Checklist", "desc": "Step-by-step startup guide", "download": True},
+            ],
+            "Technical": [
+                {"name": "🐛 Bug Report Template", "desc": "Standard bug reporting", "download": True},
+                {"name": "💻 Project Documentation", "desc": "Software documentation template", "download": True},
+                {"name": "🔧 Maintenance Checklist", "desc": "System maintenance schedule", "download": True},
+                {"name": "📱 App Requirements", "desc": "Mobile app requirements doc", "download": True},
+            ],
+            "Government": [
+                {"name": "🆔 CNIC Application Checklist", "desc": "Documents needed for CNIC", "download": True},
+                {"name": "📄 Passport Requirements", "desc": "Passport application checklist", "download": True},
+                {"name": "🚗 Vehicle Transfer Process", "desc": "Step-by-step guide", "download": True},
+                {"name": "🏠 Property Registration", "desc": "Property registration process", "download": True},
+            ]
+        }
+        
+        # Display resources
+        if resource_categories == "All":
+            for category, resources in RESOURCES.items():
+                st.markdown(f"### {category} Resources")
+                cols = st.columns(2)
+                
+                for idx, resource in enumerate(resources):
+                    with cols[idx % 2]:
                         st.markdown(f"""
-                        <div class="time-travel-card">
-                            <h3>✨ Optimal Solution</h3>
-                            <p><strong>Approach:</strong> {solution['solution']}</p>
-                            <p><strong>Required Resources:</strong> {resources_display}</p>
-                            <p><strong>Estimated Timeline:</strong> {timeline} years</p>
-                            <p><strong>Success Probability:</strong> {solution['success_probability']*100:.1f}%</p>
+                        <div class="feature-card">
+                            <strong>{resource['name']}</strong>
+                            <p>{resource['desc']}</p>
                         </div>
                         """, unsafe_allow_html=True)
                         
-                        # Implementation plan
-                        st.markdown("#### 📋 Implementation Plan")
-                        
-                        if 'implementation_plan' in solution:
-                            for phase, description in solution['implementation_plan'].items():
-                                st.write(f"**{phase.replace('phase', 'Phase ')}**: {description}")
-                        else:
-                            steps = [
-                                f"Year 1-2: Initial research and planning",
-                                f"Year 3-5: Pilot projects and testing",
-                                f"Year 6-10: Global rollout and scaling",
-                                f"Year 11+: Maintenance and optimization"
-                            ]
-                            for i, step in enumerate(steps, 1):
-                                st.write(f"{i}. {step}")
-                        
-                        # Key milestones
-                        if 'key_milestones' in solution:
-                            st.markdown("#### 🎯 Key Milestones")
-                            for milestone in solution['key_milestones']:
-                                st.write(f"• {milestone}")
-                        
-                        # Potential roadblocks
-                        if 'potential_roadblocks' in solution:
-                            st.markdown("#### ⚠️ Potential Roadblocks")
-                            for roadblock in solution['potential_roadblocks']:
-                                st.write(f"• {roadblock}")
-                        
-                        # Visualization of impact
-                        st.markdown("#### 📈 Expected Impact")
-                        
-                        try:
-                            impact_data = pd.DataFrame({
-                                'Year': list(range(timeline + 1)),
-                                'Problem_Severity': [100 - (i/timeline)*80 for i in range(timeline + 1)],
-                                'Resources_Used': [(resources/timeline)*i for i in range(timeline + 1)],
-                                'Public_Support': [30 + (i/timeline)*40 for i in range(timeline + 1)]
-                            })
+                        if resource['download']:
+                            # Create sample content for download
+                            sample_content = f"""# {resource['name']}
                             
-                            fig = go.Figure()
-                            fig.add_trace(go.Scatter(x=impact_data['Year'], y=impact_data['Problem_Severity'],
-                                                   mode='lines', name='Problem Severity'))
-                            fig.add_trace(go.Scatter(x=impact_data['Year'], y=impact_data['Public_Support'],
-                                                   mode='lines', name='Public Support', yaxis='y2'))
+This is a sample template for {resource['desc'].lower()}
+Generated by AI-SPARK on {datetime.now().strftime('%Y-%m-%d')}
+
+Instructions:
+1. Fill in your information
+2. Save a copy
+3. Use as needed
+
+Note: This is a template. Consult with professionals for important matters.
+                            """
                             
-                            fig.update_layout(
-                                title='Expected Impact Over Time',
-                                yaxis=dict(title='Problem Severity (%)'),
-                                yaxis2=dict(title='Public Support (%)', overlaying='y', side='right'),
-                                height=400
+                            st.download_button(
+                                label="📥 Download Template",
+                                data=sample_content,
+                                file_name=f"{resource['name'].replace(' ', '_')}.txt",
+                                mime="text/plain",
+                                key=f"dl_{category}_{idx}"
                             )
-                            
-                            st.plotly_chart(fig, use_container_width=True)
-                        except Exception as e:
-                            st.warning(f"Could not generate impact chart: {str(e)}")
-                            
-                    except Exception as e:
-                        st.error(f"Error solving problem: {str(e)}")
-        
-        # Multiple problem solver
-        st.markdown("---")
-        st.markdown("#### 🎪 Solve Multiple Problems Simultaneously")
-        
-        selected_problems = st.multiselect(
-            "Select Multiple Problems",
-            list(problem_solver.PROBLEM_DATABASE.keys()),
-            default=['world_hunger', 'climate_change'],
-            format_func=lambda x: x.replace('_', ' ').title()
-        )
-        
-        if selected_problems and st.button("🌀 SOLVE ALL SELECTED", type="secondary"):
-            total_resources = 0
-            total_timeline = 0
-            
-            for prob in selected_problems:
-                prob_data = problem_solver.PROBLEM_DATABASE[prob]
-                res = problem_solver.parse_resource_string(prob_data['resources_needed'])
-                total_resources += res
-                total_timeline = max(total_timeline, int(prob_data['timeline'].split()[0]))
-            
-            # Format total resources
-            total_display = format_large_number(total_resources)
-            
-            st.info(f"**Total Resources Needed:** {total_display} | **Timeline:** {total_timeline} years")
-            
-            # Show synergy analysis
-            synergy_factor = 0.65  # 35% reduction
-            time_factor = 0.8  # 20% reduction
-            
-            st.success(f"✨ **Synergy Detected!** Solving these together reduces total cost by {(1-synergy_factor)*100:.0f}% and timeline by {(1-time_factor)*100:.0f}%")
-            
-            col_syn1, col_syn2 = st.columns(2)
-            with col_syn1:
-                adjusted_cost = total_resources * synergy_factor
-                adj_display = format_large_number(adjusted_cost)
-                st.metric("Adjusted Cost", adj_display, f"-{(1-synergy_factor)*100:.0f}%")
-            with col_syn2:
-                st.metric("Adjusted Timeline", f"{int(total_timeline*time_factor)} years", f"-{(1-time_factor)*100:.0f}%")
-    
-    with tab4:
-        st.markdown("### 🧠 Planetary Neural Network")
-        
-        # Brain-inspired visualization
-        st.markdown("#### 🧬 Collective Consciousness Visualization")
-        
-        try:
-            # Generate neural network data
-            nodes = []
-            edges = []
-            
-            # Create 50 major nodes (cities/regions)
-            for i in range(50):
-                nodes.append({
-                    'id': f'node_{i}',
-                    'label': f'Region_{i}',
-                    'size': np.random.uniform(5, 20),
-                    'color': f'rgb({np.random.randint(0,255)},{np.random.randint(0,255)},{np.random.randint(0,255)})',
-                    'x': np.random.uniform(-100, 100),
-                    'y': np.random.uniform(-100, 100),
-                    'activity': np.random.uniform(0, 1)
-                })
-            
-            # Create connections
-            for i in range(100):
-                edges.append({
-                    'source': f'node_{np.random.randint(0,50)}',
-                    'target': f'node_{np.random.randint(0,50)}',
-                    'strength': np.random.uniform(0.1, 1),
-                    'type': np.random.choice(['economic', 'social', 'technological', 'cultural'])
-                })
-            
-            # Create network visualization
-            edge_traces = []
-            for edge in edges[:50]:  # Limit for performance
-                source = next((n for n in nodes if n['id'] == edge['source']), None)
-                target = next((n for n in nodes if n['id'] == edge['target']), None)
+        else:
+            if resource_categories in RESOURCES:
+                resources = RESOURCES[resource_categories]
+                cols = st.columns(2)
                 
-                if source and target:
-                    edge_trace = go.Scatter(
-                        x=[source['x'], target['x'], None],
-                        y=[source['y'], target['y'], None],
-                        line=dict(width=edge['strength']*3, color='rgba(100,100,100,0.3)'),
-                        hoverinfo='none',
-                        mode='lines'
-                    )
-                    edge_traces.append(edge_trace)
-            
-            node_trace = go.Scatter(
-                x=[n['x'] for n in nodes],
-                y=[n['y'] for n in nodes],
-                mode='markers',
-                marker=dict(
-                    size=[n['size']*10 for n in nodes],
-                    color=[n['color'] for n in nodes],
-                    line=dict(width=2, color='white')
-                ),
-                text=[n['label'] for n in nodes],
-                hoverinfo='text'
-            )
-            
-            fig = go.Figure(data=edge_traces + [node_trace])
-            fig.update_layout(
-                title='Planetary Neural Network - Live Connections',
-                showlegend=False,
-                height=600,
-                paper_bgcolor='black',
-                plot_bgcolor='black',
-                xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
-        except Exception as e:
-            st.error(f"Neural network visualization error: {str(e)}")
-            st.info("Generating alternative visualization...")
-            
-            # Alternative: Simple scatter plot
-            fig = px.scatter(
-                x=[np.random.uniform(-100, 100) for _ in range(50)],
-                y=[np.random.uniform(-100, 100) for _ in range(50)],
-                size=[np.random.uniform(5, 20) for _ in range(50)],
-                title='Planetary Neural Nodes'
-            )
-            st.plotly_chart(fig, use_container_width=True)
+                for idx, resource in enumerate(resources):
+                    with cols[idx % 2]:
+                        st.markdown(f"""
+                        <div class="feature-card">
+                            <strong>{resource['name']}</strong>
+                            <p>{resource['desc']}</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        
+                        if resource['download']:
+                            sample_content = f"""# {resource['name']}
+                            
+Template for {resource['desc'].lower()}
+AI-SPARK Resource - {datetime.now().strftime('%Y-%m-%d')}
+
+This template helps you organize and track relevant information.
+For official matters, always use approved forms and consult authorities.
+                            """
+                            
+                            st.download_button(
+                                label="📥 Download",
+                                data=sample_content,
+                                file_name=f"{resource['name'].replace(' ', '_')}.txt",
+                                mime="text/plain",
+                                key=f"dl_{resource_categories}_{idx}"
+                            )
         
-        # Consciousness metrics
-        st.markdown("#### 📊 Global Consciousness Metrics")
+        # Online Courses Section
+        st.markdown("---")
+        st.markdown("## 🎓 Free Online Courses (Pakistan)")
         
-        try:
-            consciousness_data = pd.DataFrame({
-                'Metric': ['Collective IQ', 'Empathy Index', 'Creativity Flow', 
-                          'Decision Speed', 'Pattern Recognition', 'Memory Capacity',
-                          'Learning Rate', 'Intuition Score', 'Wisdom Accumulation'],
-                'Value': [np.random.uniform(60, 90) for _ in range(9)],
-                'Trend': np.random.choice(['↑', '↓', '→'], 9)
-            })
-            
-            # Bar chart
-            fig = px.bar(consciousness_data, x='Metric', y='Value', 
-                        title='Consciousness Metrics',
-                        color='Value',
-                        color_continuous_scale='Viridis')
-            
-            fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
-        except Exception as e:
-            st.error(f"Consciousness metrics error: {str(e)}")
-        
-        # Real-time thought stream
-        st.markdown("#### 💭 Live Global Thought Stream")
-        
-        thoughts = [
-            "Humanity contemplates its place in the universe",
-            "Collective anxiety about climate change peaks",
-            "Global excitement about new AI discoveries",
-            "Mass meditation for world peace happening now",
-            "Scientific breakthrough in quantum computing",
-            "Artistic renaissance sweeping through Asia",
-            "Philosophical debate about AI rights intensifies",
-            "Global grief over natural disaster in Pacific",
-            "Celebration of cultural diversity trending",
-            "Consensus forming on universal basic income"
+        courses = [
+            {"name": "Digital Skills", "platform": "Google Digital Garage", "duration": "10 hours", "link": "https://learndigital.withgoogle.com/digitalgarage"},
+            {"name": "AI For Everyone", "platform": "Coursera", "duration": "12 hours", "link": "https://www.coursera.org/learn/ai-for-everyone"},
+            {"name": "Financial Literacy", "platform": "State Bank of Pakistan", "duration": "8 hours", "link": "https://www.sbp.org.pk/finca/"},
+            {"name": "Entrepreneurship", "platform": "SMEDA", "duration": "15 hours", "link": "https://smeda.org/"},
+            {"name": "Freelancing", "platform": "DigiSkills.pk", "duration": "20 hours", "link": "https://digiskills.pk/"},
+            {"name": "Coding Basics", "platform": "Code.org", "duration": "15 hours", "link": "https://code.org/"},
         ]
         
-        thought_container = st.container()
-        with thought_container:
-            for thought in thoughts:
-                if np.random.random() > 0.3:  # 70% chance to show each
-                    st.write(f"💭 **{thought}** - {np.random.randint(1000, 1000000):,} minds engaged")
+        course_cols = st.columns(3)
+        for idx, course in enumerate(courses):
+            with course_cols[idx % 3]:
+                st.markdown(f"""
+                <div style='padding: 15px; background: #f8f9fa; border-radius: 10px; margin: 10px 0;'>
+                    <strong>{course['name']}</strong><br>
+                    <small>{course['platform']} • {course['duration']}</small><br>
+                    <a href='{course['link']}' target='_blank'>🔗 Visit Course</a>
+                </div>
+                """, unsafe_allow_html=True)
     
     with tab5:
-        st.markdown("### 🌌 Cosmic Perspective")
+        st.markdown("## 🆘 Emergency Help Center")
         
-        # Scale visualization
-        st.markdown("#### 📏 Civilization Scale (Kardashev Scale)")
+        col1, col2 = st.columns(2)
         
-        kardashev_level = 0.73  # Current human civilization
-        
-        try:
-            fig = go.Figure(go.Indicator(
-                mode="gauge+number",
-                value=kardashev_level,
-                domain={'x': [0, 1], 'y': [0, 1]},
-                title={'text': "Kardashev Scale"},
-                gauge={
-                    'axis': {'range': [0, 3], 'tickwidth': 1},
-                    'bar': {'color': "darkblue"},
-                    'steps': [
-                        {'range': [0, 1], 'color': "lightgray"},
-                        {'range': [1, 2], 'color': "gray"},
-                        {'range': [2, 3], 'color': "darkgray"}
-                    ],
-                    'threshold': {
-                        'line': {'color': "red", 'width': 4},
-                        'thickness': 0.75,
-                        'value': kardashev_level
-                    }
-                }
-            ))
+        with col1:
+            st.markdown('<div class="warning-box"><h3>🚨 Immediate Emergency</h3></div>', unsafe_allow_html=True)
             
-            fig.update_layout(height=300)
-            st.plotly_chart(fig, use_container_width=True)
-        except Exception as e:
-            st.error(f"Gauge chart error: {str(e)}")
-        
-        # Scale explanation
-        col_scale1, col_scale2, col_scale3 = st.columns(3)
-        
-        with col_scale1:
-            st.markdown("""
-            **Type 0**
-            - Uses planetary energy
-            - Current human level
-            - Limited to Earth
-            """)
-        
-        with col_scale2:
-            st.markdown("""
-            **Type I**
-            - Uses all planetary energy
-            - Controls climate
-            - Planetary civilization
-            """)
-        
-        with col_scale3:
-            st.markdown("""
-            **Type II**
-            - Uses star's energy
-            - Dyson sphere builders
-            - Stellar civilization
-            """)
-        
-        # Cosmic timeline
-        st.markdown("#### 🕰️ Cosmic Timeline")
-        
-        try:
-            cosmic_events = [
-                {"time": -13700000000, "event": "Big Bang", "scale": "cosmic"},
-                {"time": -4500000000, "event": "Earth Forms", "scale": "planetary"},
-                {"time": -3500000000, "event": "First Life", "scale": "biological"},
-                {"time": -500000, "event": "First Humans", "scale": "human"},
-                {"time": -10000, "event": "Civilization", "scale": "human"},
-                {"time": 0, "event": "Present Day", "scale": "human"},
-                {"time": 1000, "event": "Type I Civilization", "scale": "civilizational"},
-                {"time": 10000, "event": "Type II Civilization", "scale": "stellar"},
-                {"time": 1000000, "event": "Type III Civilization", "scale": "galactic"},
-                {"time": 10000000000, "event": "Heat Death?", "scale": "cosmic"},
-            ]
+            emergency_options = st.selectbox(
+                "Select Emergency Type",
+                ["Medical Emergency", "Police Help", "Fire", "Natural Disaster", "Women/Child Abuse", "Mental Health Crisis"]
+            )
             
-            cosmic_df = pd.DataFrame(cosmic_events)
-            
-            fig = px.scatter(cosmic_df, x='time', y=[1]*len(cosmic_df),
-                            size=[10]*len(cosmic_df), color='scale',
-                            text='event', log_x=True,
-                            title='Cosmic Timeline (Log Scale)')
-            
-            fig.update_traces(textposition='top center')
-            fig.update_layout(height=400, showlegend=True)
-            
-            st.plotly_chart(fig, use_container_width=True)
-        except Exception as e:
-            st.error(f"Cosmic timeline error: {str(e)}")
-        
-        # Alien contact simulation
-        st.markdown("#### 👽 Drake Equation Calculator")
-        
-        drake_cols = st.columns(5)
-        
-        with drake_cols[0]:
-            R = st.slider("Star formation rate", 1.0, 10.0, 1.5, 0.1)
-        with drake_cols[1]:
-            fp = st.slider("Planets per star", 0.1, 2.0, 0.4, 0.1)
-        with drake_cols[2]:
-            ne = st.slider("Habitable planets", 0.1, 5.0, 0.3, 0.1)
-        with drake_cols[3]:
-            fl = st.slider("Life developing", 0.0, 1.0, 0.5, 0.1)
-        with drake_cols[4]:
-            fi = st.slider("Intelligent life", 0.0, 1.0, 0.2, 0.1)
-        
-        # Calculate
-        N = R * fp * ne * fl * fi  # Simplified Drake equation
-        
-        st.metric("Estimated civilizations in Milky Way", f"{N:.0f}")
-        
-        if N > 1:
-            st.success(f"🌌 There could be {N:.0f} civilizations in our galaxy!")
-            if st.button("📡 Attempt Communication"):
-                st.balloons()
-                st.info("Message sent to nearest potentially habitable exoplanets. Expected reply time: 50-100 years.")
-        else:
-            st.warning("We might be alone in our galaxy...")
-    
-    with tab6:
-        st.markdown("### ⚙️ Reality Engine Settings")
-        
-        # Reality parameters
-        st.markdown("#### 🔧 Adjust Reality Parameters")
-        
-        col_params1, col_params2 = st.columns(2)
-        
-        with col_params1:
-            gravity = st.slider("Gravity Constant", 0.1, 10.0, 9.8, 0.1)
-            light_speed = st.slider("Speed of Light (m/s)", 1e6, 1e9, 3e8, 1e6)
-            time_flow = st.slider("Time Flow Rate", 0.1, 10.0, 1.0, 0.1)
-        
-        with col_params2:
-            entropy = st.slider("Entropy Rate", 0.1, 5.0, 1.0, 0.1)
-            quantum_fluctuations = st.slider("Quantum Fluctuations", 0.0, 10.0, 1.0, 0.1)
-            consciousness_density = st.slider("Consciousness Density", 0.1, 10.0, 1.0, 0.1)
-        
-        # Apply changes
-        if st.button("🌀 APPLY NEW REALITY PARAMETERS", type="primary"):
-            with st.spinner("Rebooting universe with new parameters..."):
-                time.sleep(3)
+            if emergency_options == "Medical Emergency":
+                st.markdown("""
+                ### 🏥 Immediate Actions:
+                1. **Call 1122** for ambulance
+                2. **Don't move** the patient if serious injury
+                3. **Check breathing** and pulse
+                4. **Perform CPR** if trained
+                5. **Gather medicines** and medical history
                 
-                # Calculate effects
-                effects = {
-                    "Human height": f"{170 * (9.8/gravity):.1f} cm",
-                    "Lifespan": f"{80 * time_flow:.1f} years",
-                    "Technology speed": f"{light_speed/3e8:.1f}x faster",
-                    "Information decay": f"{entropy:.1f}x faster",
-                    "Random events": f"{quantum_fluctuations:.1f}x more frequent",
-                    "Creative output": f"{consciousness_density:.1f}x higher"
-                }
+                ### 📞 Hospital Emergency Numbers:
+                - Aga Khan Hospital: **021-111-911-911**
+                - Shaukat Khanum: **042-111-911-911**
+                - Jinnah Hospital: **042-992-313-00**
+                - Civil Hospital: **021-992-157-00**
+                """)
+            
+            elif emergency_options == "Police Help":
+                st.markdown("""
+                ### 👮 Police Emergency:
+                1. **Call 15** for police
+                2. **Call 1122** for rescue
+                3. **Call 0800-66666** for legal aid
+                4. **Women Helpline: 1099**
+                5. **Child Protection: 1121**
                 
-                st.success("✅ Universe successfully reconfigured!")
+                ### 📍 Nearby Police Stations:
+                - Use Google Maps to find nearest station
+                - Contact Dolphin Force in big cities
+                - Download Punjab Police app for help
+                """)
+            
+            elif emergency_options == "Mental Health Crisis":
+                st.markdown("""
+                ### 🧠 Mental Health Support:
+                1. **Umang Pakistan:** 0311-778-6264
+                2. **Taskeen:** 0311-111-000
+                3. **Mental Health Helpline:** 1133
+                4. **Mari Abdul Wali Khan Hospital:** 091-922-1401
                 
-                st.markdown("#### 📊 New Reality Statistics")
-                for effect, value in effects.items():
-                    st.write(f"**{effect}:** {value}")
+                ### 💬 Immediate Help:
+                - Talk to someone you trust
+                - Practice deep breathing
+                - Remove yourself from stressful situation
+                - Remember: This too shall pass
+                """)
+            
+            # Emergency Button
+            if st.button("🆘 CALL EMERGENCY SERVICES NOW", type="secondary", use_container_width=True):
+                st.warning("Dialing emergency number... Please stay calm and provide clear information.")
+                st.info("**Location:** Share your exact location\n**Problem:** Describe emergency clearly\n**People:** Mention number of people affected")
         
-        # Save/load realities
-        st.markdown("#### 💾 Reality Presets")
-        
-        preset_cols = st.columns(4)
-        
-        with preset_cols[0]:
-            if st.button("🔄 Default Reality"):
-                st.info("Loaded default reality parameters")
-        
-        with preset_cols[1]:
-            if st.button("⚡ Fast Reality"):
-                st.info("Time flows 5x faster, light speed doubled")
-        
-        with preset_cols[2]:
-            if st.button("🧠 Conscious Reality"):
-                st.info("Consciousness density 10x, creativity amplified")
-        
-        with preset_cols[3]:
-            if st.button("🎮 Game Reality"):
-                st.info("Low gravity, high quantum fluctuations for fun")
-        
-        # Export reality
-        st.markdown("#### 📤 Export Current Reality")
-        
-        if st.button("💾 Save Reality Configuration"):
-            reality_config = {
-                "name": "Custom_Reality_" + datetime.now().strftime("%Y%m%d_%H%M%S"),
-                "parameters": {
-                    "gravity": gravity,
-                    "light_speed": light_speed,
-                    "time_flow": time_flow,
-                    "entropy": entropy,
-                    "quantum_fluctuations": quantum_fluctuations,
-                    "consciousness_density": consciousness_density
-                },
-                "created": datetime.now().isoformat(),
-                "creator": user_role,
-                "version": "4.2"
+        with col2:
+            st.markdown('<div class="solution-box"><h3>📞 Important Contacts</h3></div>', unsafe_allow_html=True)
+            
+            contacts = {
+                "Rescue 1122": "1122",
+                "Police": "15",
+                "Fire Brigade": "16",
+                "Women Helpline": "1099",
+                "Child Protection": "1121",
+                "Electricity Complaint": "118",
+                "Gas Emergency": "119",
+                "PTCL Helpline": "1218"
             }
             
-            json_str = json.dumps(reality_config, indent=2)
+            for service, number in contacts.items():
+                col_num, col_btn = st.columns([2, 1])
+                with col_num:
+                    st.markdown(f"**{service}:** `{number}`")
+                with col_btn:
+                    st.button(f"Call", key=f"call_{service}", use_container_width=True)
             
-            st.download_button(
-                label="📥 Download Reality File",
-                data=json_str,
-                file_name=f"{reality_config['name']}.json",
-                mime="application/json"
+            st.markdown("---")
+            st.markdown("### 📍 Find Nearby Services")
+            
+            service_type = st.selectbox(
+                "Find nearest:",
+                ["Hospital", "Police Station", "Fire Station", "Pharmacy", "Blood Bank"]
             )
+            
+            if st.button("🔍 Search on Google Maps", use_container_width=True):
+                st.info(f"Searching for nearest {service_type}... Open Google Maps to see results.")
+                st.write("""
+                **Pro Tip:** 
+                - Enable location services
+                - Check reviews and ratings
+                - Call ahead to confirm availability
+                - Note down address and contact number
+                """)
+            
+            st.markdown("---")
+            st.markdown("### 🆘 Emergency Kit Checklist")
+            
+            with st.expander("View Emergency Kit Items"):
+                st.write("""
+                **Essential Items:**
+                - First aid kit
+                - Flashlight with batteries
+                - Bottled water
+                - Non-perishable food
+                - Medications (7-day supply)
+                - Copies of important documents
+                - Cash (small bills)
+                - Phone charger/power bank
+                
+                **For Pakistan:**
+                - CNIC copies
+                - Health insurance card
+                - Emergency contact numbers
+                - Local map
+                """)
     
     # Footer
     st.markdown("---")
-    st.markdown(f"""
-    <div style="text-align: center; color: #aaa; padding: 20px;">
+    st.markdown("""
+    <div style="text-align: center; color: #666; padding: 20px;">
         <p style="font-size: 1.1rem;">
-            🧠 <b>TERRA COGNITA v4.2</b> | 
-            🌍 Digital Twin of Earth | 
-            ⏰ Time Travel Interface | 
-            🎯 Universal Problem Solver
+            🤖 <strong>AI-SPARK v2.0</strong> | 
+            🇵🇰 Made for Pakistan | 
+            🆓 100% Free Forever | 
+            🔒 Privacy First
         </p>
         <p>
-            🕒 Simulation Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | 
-            👥 Active Users: 8,123,456,789 | 
-            🌌 Parallel Universes: {quantum_sim.parallel_universes:,} | 
-            ⚡ Processing Power: 1.2 ZettaFLOPS
+            📧 Contact: support@ai-spark.pk | 
+            📞 Helpline: 0800-AI-HELP | 
+            🕒 24/7 Available
         </p>
-        <p style="font-size: 0.9rem; color: #777;">
-            © 2024 Terra Cognita Project | 
-            Access Level: {access_level} | 
-            User: {user_role} | 
-            Reality ID: {np.random.randint(1000000, 9999999)}
+        <p style="font-size: 0.9rem; color: #999;">
+            © 2024 AI-SPARK Project • All solutions are AI-generated advice • 
+            Always consult professionals for critical matters • 
+            Report bugs: github.com/ai-spark
         </p>
     </div>
     """, unsafe_allow_html=True)
