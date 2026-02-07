@@ -11,6 +11,7 @@ import aiohttp
 import json
 from typing import Dict, List, Tuple, Optional
 import warnings
+import re  # Added for string parsing
 warnings.filterwarnings('ignore')
 
 # ==================== QUANTUM SIMULATION ENGINE ====================
@@ -279,6 +280,52 @@ class OmniscientProblemSolver:
         }
     }
     
+    @staticmethod
+    def parse_resource_string(resource_str):
+        """
+        Convert resource strings like '$1.5T' or '$2B' to float values.
+        Supports suffixes: K (thousand), M (million), B (billion), T (trillion), A (quadrillion)
+        """
+        if not resource_str or not isinstance(resource_str, str):
+            return 0.0
+        
+        # Clean the string
+        s = resource_str.strip().upper().replace('$', '').replace(',', '')
+        
+        # If it's not a numeric string, return 0
+        if s == '':
+            return 0.0
+            
+        # Define multipliers
+        multipliers = {
+            'K': 1e3,
+            'M': 1e6,
+            'B': 1e9,
+            'T': 1e12,
+            'A': 1e15  # quadrillion
+        }
+        
+        # Remove any non-numeric prefixes and suffixes
+        # Extract numeric part and suffix
+        match = re.match(r'([0-9]+\.?[0-9]*)([KMBT]?)(?:/.*)?', s)
+        if match:
+            num_str = match.group(1)
+            suffix = match.group(2)
+            
+            try:
+                number = float(num_str)
+                if suffix in multipliers:
+                    return number * multipliers[suffix]
+                return number
+            except ValueError:
+                return 0.0
+        else:
+            # Try direct conversion
+            try:
+                return float(s)
+            except ValueError:
+                return 0.0
+    
     def solve_problem(self, problem_name, resources_allocated=None):
         """Solve any global problem instantly"""
         if problem_name not in self.PROBLEM_DATABASE:
@@ -288,9 +335,12 @@ class OmniscientProblemSolver:
         
         # Adjust solution based on resources
         if resources_allocated:
-            factor = resources_allocated / float(problem['resources_needed'].strip('$TBM'))
-            problem['success_probability'] = min(0.99, problem['success_probability'] * factor)
-            problem['timeline'] = f"{int(float(problem['timeline'].split()[0]) / max(1, factor))} years"
+            base_amount = self.parse_resource_string(problem['resources_needed'])
+            if base_amount > 0:
+                factor = resources_allocated / base_amount
+                problem['success_probability'] = min(0.99, problem['success_probability'] * factor)
+                timeline_years = int(problem['timeline'].split()[0])
+                problem['timeline'] = f"{max(1, int(timeline_years / max(1, factor)))} years"
         
         # Generate implementation plan
         problem['implementation_plan'] = self._generate_implementation_plan(problem_name)
@@ -364,6 +414,37 @@ def main():
             border: 1px solid rgba(0, 255, 255, 0.5);
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
             backdrop-filter: blur(10px);
+        }
+        
+        .stButton>button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .stButton>button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            margin: 10px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #f46b45 0%, #eea849 100%);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            margin: 10px 0;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -741,21 +822,29 @@ def main():
             col_res1, col_res2 = st.columns(2)
             
             with col_res1:
+                # Parse the resource string properly
+                default_value = problem_solver.parse_resource_string(problem_info['resources_needed'])
+                
                 resources = st.number_input(
                     "Allocate Resources ($)",
                     min_value=1.0,
-                    max_value=1000000.0,
-                    value=float(problem_info['resources_needed'].replace('$', '').replace('T', '000').replace('B', '000').replace('M', '')),
-                    step=1000.0
+                    max_value=1e18,  # Increased to allow for trillion-dollar values
+                    value=default_value,
+                    step=1000000000.0,  # Step of 1 billion
+                    format="%.0f"
                 )
                 
                 # Format for display
-                if resources >= 1e12:
+                if resources >= 1e15:
+                    resources_display = f"${resources/1e15:.1f}Q"  # Quadrillion
+                elif resources >= 1e12:
                     resources_display = f"${resources/1e12:.1f}T"
                 elif resources >= 1e9:
                     resources_display = f"${resources/1e9:.1f}B"
                 elif resources >= 1e6:
                     resources_display = f"${resources/1e6:.1f}M"
+                elif resources >= 1e3:
+                    resources_display = f"${resources/1e3:.1f}K"
                 else:
                     resources_display = f"${resources:,.0f}"
             
@@ -850,20 +939,40 @@ def main():
             
             for prob in selected_problems:
                 prob_data = problem_solver.PROBLEM_DATABASE[prob]
-                res = float(prob_data['resources_needed'].replace('$', '').replace('T', '000').replace('B', '000').replace('M', ''))
+                res = problem_solver.parse_resource_string(prob_data['resources_needed'])
                 total_resources += res
                 total_timeline = max(total_timeline, int(prob_data['timeline'].split()[0]))
             
-            st.info(f"**Total Resources Needed:** ${total_resources/1e12:.1f}T | **Timeline:** {total_timeline} years")
+            # Format total resources
+            if total_resources >= 1e15:
+                total_display = f"${total_resources/1e15:.1f}Q"
+            elif total_resources >= 1e12:
+                total_display = f"${total_resources/1e12:.1f}T"
+            elif total_resources >= 1e9:
+                total_display = f"${total_resources/1e9:.1f}B"
+            else:
+                total_display = f"${total_resources:,.0f}"
+            
+            st.info(f"**Total Resources Needed:** {total_display} | **Timeline:** {total_timeline} years")
             
             # Show synergy analysis
-            st.success("✨ **Synergy Detected!** Solving these together reduces total cost by 35% and timeline by 20%")
+            synergy_factor = 0.65  # 35% reduction
+            time_factor = 0.8  # 20% reduction
+            
+            st.success(f"✨ **Synergy Detected!** Solving these together reduces total cost by {(1-synergy_factor)*100:.0f}% and timeline by {(1-time_factor)*100:.0f}%")
             
             col_syn1, col_syn2 = st.columns(2)
             with col_syn1:
-                st.metric("Adjusted Cost", f"${total_resources*0.65/1e12:.1f}T", "-35%")
+                adjusted_cost = total_resources * synergy_factor
+                if adjusted_cost >= 1e15:
+                    adj_display = f"${adjusted_cost/1e15:.1f}Q"
+                elif adjusted_cost >= 1e12:
+                    adj_display = f"${adjusted_cost/1e12:.1f}T"
+                else:
+                    adj_display = f"${adjusted_cost/1e9:.1f}B"
+                st.metric("Adjusted Cost", adj_display, f"-{(1-synergy_factor)*100:.0f}%")
             with col_syn2:
-                st.metric("Adjusted Timeline", f"{int(total_timeline*0.8)} years", "-20%")
+                st.metric("Adjusted Timeline", f"{int(total_timeline*time_factor)} years", f"-{(1-time_factor)*100:.0f}%")
     
     with tab4:
         st.markdown("### 🧠 Planetary Neural Network")
@@ -1188,7 +1297,7 @@ def main():
     st.markdown(f"""
     <div style="text-align: center; color: #aaa; padding: 20px;">
         <p style="font-size: 1.1rem;">
-            🧠 <b>TERRA COGNITA v4.0</b> | 
+            🧠 <b>TERRA COGNITA v4.1</b> | 
             🌍 Digital Twin of Earth | 
             ⏰ Time Travel Interface | 
             🎯 Universal Problem Solver
