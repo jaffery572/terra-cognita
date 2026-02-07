@@ -85,6 +85,38 @@ class QuantumCivilizationSimulator:
                 state[key] = max(0, min(100, state[key]))
         
         return state
+    
+    def _collapse_wave_function(self, simulations):
+        """Collapse quantum superposition to single reality"""
+        # Average all parallel universes
+        if not simulations:
+            return []
+        
+        # Find the longest timeline
+        max_len = max(len(sim) for sim in simulations)
+        
+        collapsed = []
+        for i in range(max_len):
+            year_data = []
+            for sim in simulations:
+                if i < len(sim):
+                    year_data.append(sim[i])
+            
+            if year_data:
+                # Create average of all universes
+                avg_state = {}
+                for key in year_data[0].keys():
+                    if key not in ['year', 'universe', 'collapse']:
+                        values = [d[key] for d in year_data if key in d]
+                        if values:
+                            avg_state[key] = np.mean(values)
+                
+                collapsed.append({
+                    'year': year_data[0]['year'] if 'year' in year_data[0] else i + 2024,
+                    **avg_state
+                })
+        
+        return collapsed
 
 # ==================== REAL-TIME PLANETARY MONITOR ====================
 class PlanetaryNervousSystem:
@@ -152,7 +184,12 @@ class ChronoNavigator:
         current_year = datetime.now().year
         
         if target_year == current_year:
-            return "Present day - Welcome to 2024!"
+            return {
+                'status': "Present day - Welcome to 2024!",
+                'era': 'Modern Information Age',
+                'world_population': '8.1 billion',
+                'dominant_technology': 'AI, Quantum Computing, Internet'
+            }
         elif target_year < current_year:
             return self._travel_to_past(target_year)
         else:
@@ -216,6 +253,84 @@ class ChronoNavigator:
             'probability_of_existence': max(0, 100 - (year - 2024) * 0.1),
             'warning': "Future is probabilistic - this is one possible timeline"
         }
+    
+    def _get_historical_era(self, year):
+        """Determine historical era based on year"""
+        if year < -10000:
+            return "Paleolithic Age"
+        elif year < -3000:
+            return "Neolithic Age"
+        elif year < 500:
+            return "Ancient Civilizations"
+        elif year < 1500:
+            return "Middle Ages"
+        elif year < 1800:
+            return "Renaissance"
+        elif year < 1900:
+            return "Industrial Age"
+        elif year < 2000:
+            return "Modern Age"
+        else:
+            return "Information Age"
+    
+    def _estimate_population(self, year):
+        """Rough estimate of world population for given year"""
+        estimates = {
+            -10000: "1-10 million",
+            -3000: "14-20 million",
+            0: "170-400 million",
+            500: "190-210 million",
+            1000: "275-350 million",
+            1500: "425-540 million",
+            1800: "0.9-1.0 billion",
+            1900: "1.6 billion",
+            1950: "2.5 billion",
+            2000: "6.1 billion",
+            2024: "8.1 billion"
+        }
+        
+        # Find closest year in estimates
+        closest_year = min(estimates.keys(), key=lambda x: abs(x - year))
+        return estimates[closest_year]
+    
+    def _get_era_technology(self, year):
+        """Describe dominant technology of era"""
+        if year < -3000:
+            return "Stone tools, fire"
+        elif year < 0:
+            return "Bronze, writing, wheel"
+        elif year < 500:
+            return "Iron, concrete, aqueducts"
+        elif year < 1500:
+            return "Windmills, printing press, gunpowder"
+        elif year < 1800:
+            return "Telescope, steam engine, newspapers"
+        elif year < 1900:
+            return "Telegraph, railroad, electricity"
+        elif year < 1950:
+            return "Radio, automobile, airplane"
+        elif year < 2000:
+            return "Television, computer, internet"
+        else:
+            return "Smartphones, AI, renewable energy"
+    
+    def _calculate_kardashev_scale(self, year):
+        """Estimate civilization level on Kardashev scale"""
+        future_tech = {
+            2050: "Type 0.8 - Planetary energy network",
+            2100: "Type 1.0 - Full planetary control",
+            2200: "Type 1.5 - Interplanetary civilization",
+            2300: "Type 2.0 - Stellar civilization",
+            2500: "Type 2.5 - Multi-star system control",
+            3000: "Type 3.0 - Galactic civilization"
+        }
+        
+        # Find appropriate level
+        for milestone, description in sorted(future_tech.items()):
+            if year <= milestone:
+                return description
+        
+        return "Type 3.5+ - Beyond galactic scale"
 
 # ==================== UNIVERSAL PROBLEM SOLVER ====================
 class OmniscientProblemSolver:
@@ -307,7 +422,7 @@ class OmniscientProblemSolver:
         
         # Remove any non-numeric prefixes and suffixes
         # Extract numeric part and suffix
-        match = re.match(r'([0-9]+\.?[0-9]*)([KMBT]?)(?:/.*)?', s)
+        match = re.match(r'([0-9]+\.?[0-9]*)([KMBTA]?)(?:/.*)?', s)
         if match:
             num_str = match.group(1)
             suffix = match.group(2)
@@ -338,7 +453,7 @@ class OmniscientProblemSolver:
             base_amount = self.parse_resource_string(problem['resources_needed'])
             if base_amount > 0:
                 factor = resources_allocated / base_amount
-                problem['success_probability'] = min(0.99, problem['success_probability'] * factor)
+                problem['success_probability'] = min(0.99, problem['success_probability'] * min(factor, 2.0))
                 timeline_years = int(problem['timeline'].split()[0])
                 problem['timeline'] = f"{max(1, int(timeline_years / max(1, factor)))} years"
         
@@ -348,6 +463,105 @@ class OmniscientProblemSolver:
         problem['potential_roadblocks'] = self._identify_roadblocks(problem_name)
         
         return problem
+    
+    def _generate_novel_solution(self, problem_name):
+        """Generate solution for unknown problem"""
+        return {
+            'solution': f'Quantum AI analysis suggests {problem_name.replace("_", " ")} requires systemic transformation',
+            'resources_needed': '$1T',
+            'timeline': '10 years',
+            'success_probability': 0.75,
+            'implementation_plan': {'phase1': 'Research phase', 'phase2': 'Pilot testing', 'phase3': 'Global rollout'},
+            'key_milestones': ['Year 1: Research', 'Year 3: Prototype', 'Year 5: Scale-up'],
+            'potential_roadblocks': ['Political resistance', 'Funding gaps', 'Technological barriers']
+        }
+    
+    def _generate_implementation_plan(self, problem_name):
+        """Generate detailed implementation plan"""
+        plans = {
+            'world_hunger': {
+                'phase1': 'Establish global food distribution network',
+                'phase2': 'Deploy AI-powered agricultural optimization',
+                'phase3': 'Implement blockchain food tracking',
+                'phase4': 'Scale to 100% coverage'
+            },
+            'climate_change': {
+                'phase1': 'Deploy orbital sunshades',
+                'phase2': 'Build atmospheric carbon capture facilities',
+                'phase3': 'Transition to renewable energy globally',
+                'phase4': 'Geoengineering optimization'
+            },
+            'global_conflicts': {
+                'phase1': 'AI-mediated peace negotiations',
+                'phase2': 'Economic incentive programs',
+                'phase3': 'Cultural exchange initiatives',
+                'phase4': 'Global peace monitoring'
+            }
+        }
+        
+        return plans.get(problem_name, {
+            'phase1': 'Initial research and feasibility study',
+            'phase2': 'Pilot implementation in test regions',
+            'phase3': 'Scale to global implementation',
+            'phase4': 'Ongoing optimization and maintenance'
+        })
+    
+    def _generate_milestones(self, problem_name):
+        """Generate key milestones for problem solution"""
+        milestones = {
+            'world_hunger': [
+                'Year 1: 10% reduction in hunger',
+                'Year 3: 50% reduction in hunger',
+                'Year 5: Zero hunger achieved'
+            ],
+            'climate_change': [
+                'Year 5: Carbon neutral',
+                'Year 15: Negative emissions',
+                'Year 30: Climate restored'
+            ],
+            'global_conflicts': [
+                'Year 2: 25% reduction in conflicts',
+                'Year 5: 60% reduction in conflicts',
+                'Year 10: Lasting peace established'
+            ]
+        }
+        
+        return milestones.get(problem_name, [
+            'Year 1: Project initiation',
+            'Year 3: Major milestones achieved',
+            'Year 5: Full implementation'
+        ])
+    
+    def _identify_roadblocks(self, problem_name):
+        """Identify potential roadblocks for problem solution"""
+        roadblocks = {
+            'world_hunger': ['Logistical challenges', 'Political instability', 'Climate variability'],
+            'climate_change': ['Economic costs', 'International cooperation', 'Technological limits'],
+            'global_conflicts': ['Historical grievances', 'Resource competition', 'Ideological differences']
+        }
+        
+        return roadblocks.get(problem_name, [
+            'Funding limitations',
+            'Political resistance',
+            'Technological barriers',
+            'Public acceptance'
+        ])
+
+# ==================== HELPER FUNCTIONS ====================
+def format_large_number(num):
+    """Format large numbers with K, M, B, T suffixes"""
+    if num >= 1e15:
+        return f"${num/1e15:.1f}Q"
+    elif num >= 1e12:
+        return f"${num/1e12:.1f}T"
+    elif num >= 1e9:
+        return f"${num/1e9:.1f}B"
+    elif num >= 1e6:
+        return f"${num/1e6:.1f}M"
+    elif num >= 1e3:
+        return f"${num/1e3:.1f}K"
+    else:
+        return f"${num:,.0f}"
 
 # ==================== MAIN APPLICATION ====================
 def main():
@@ -446,6 +660,21 @@ def main():
             color: white;
             margin: 10px 0;
         }
+        
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 10px;
+        }
+        
+        .stTabs [data-baseweb="tab"] {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 10px 10px 0 0;
+            padding: 10px 20px;
+            font-weight: bold;
+        }
+        
+        .stTabs [aria-selected="true"] {
+            background-color: rgba(0,255,255,0.2) !important;
+        }
     </style>
     """, unsafe_allow_html=True)
     
@@ -454,10 +683,19 @@ def main():
     st.markdown('<p style="text-align:center; color:#aaa; font-size:1.5rem;">Digital Twin of Earth • Planetary Nervous System • Time Travel Interface</p>', unsafe_allow_html=True)
     
     # Initialize systems
-    quantum_sim = QuantumCivilizationSimulator()
-    planet_monitor = PlanetaryNervousSystem()
-    time_travel = ChronoNavigator()
-    problem_solver = OmniscientProblemSolver()
+    if 'quantum_sim' not in st.session_state:
+        st.session_state.quantum_sim = QuantumCivilizationSimulator()
+    if 'planet_monitor' not in st.session_state:
+        st.session_state.planet_monitor = PlanetaryNervousSystem()
+    if 'time_travel' not in st.session_state:
+        st.session_state.time_travel = ChronoNavigator()
+    if 'problem_solver' not in st.session_state:
+        st.session_state.problem_solver = OmniscientProblemSolver()
+    
+    quantum_sim = st.session_state.quantum_sim
+    planet_monitor = st.session_state.planet_monitor
+    time_travel = st.session_state.time_travel
+    problem_solver = st.session_state.problem_solver
     
     # Sidebar
     with st.sidebar:
@@ -487,6 +725,11 @@ def main():
         show_past = st.checkbox("Show Historical Layers", True)
         show_quantum = st.checkbox("Show Quantum Superpositions", False)
         show_ai_thoughts = st.checkbox("Show AI Reasoning", True)
+        
+        # Reset button
+        if st.button("🔄 Reset Simulation", type="secondary"):
+            st.session_state.clear()
+            st.rerun()
     
     # Main tabs
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
@@ -534,11 +777,12 @@ def main():
             """, unsafe_allow_html=True)
         
         with col4:
+            bp_systolic, bp_diastolic = vital_signs['blood_pressure']
             st.markdown(f"""
             <div class="metric-hologram">
-                <h4>🛡️ Immune Response</h4>
-                <h2>{vital_signs['immune_response']:.1f}%</h2>
-                <p>Societal resilience</p>
+                <h4>🩸 Civilization Pressure</h4>
+                <h2>{bp_systolic:.0f}/{bp_diastolic:.0f}</h2>
+                <p>Systolic/Diastolic stress</p>
             </div>
             """, unsafe_allow_html=True)
         
@@ -557,13 +801,18 @@ def main():
         
         activity_df = pd.DataFrame(activity_data)
         
-        fig = px.density_mapbox(activity_df, lat='lat', lon='lon', z='activity',
-                               radius=20, zoom=1,
-                               mapbox_style="stamen-toner",
-                               title='Real-time Global Neural Activity',
-                               height=600)
-        
-        st.plotly_chart(fig, use_container_width=True)
+        try:
+            fig = px.density_mapbox(activity_df, lat='lat', lon='lon', z='activity',
+                                   radius=20, zoom=1,
+                                   mapbox_style="stamen-toner",
+                                   title='Real-time Global Neural Activity',
+                                   height=600)
+            
+            st.plotly_chart(fig, use_container_width=True)
+        except Exception as e:
+            st.warning(f"Map visualization error: {str(e)}")
+            st.info("Showing data table instead:")
+            st.dataframe(activity_df.head(10), use_container_width=True)
         
         # Civilization Health Monitor
         st.markdown("### 📊 Civilization Health Dashboard")
@@ -579,32 +828,36 @@ def main():
         })
         
         # Create radar chart
-        fig = go.Figure(data=go.Scatterpolar(
-            r=metrics['Current'],
-            theta=metrics['Metric'],
-            fill='toself',
-            name='Current Status'
-        ))
-        
-        fig.add_trace(go.Scatterpolar(
-            r=metrics['Target'],
-            theta=metrics['Metric'],
-            fill='toself',
-            name='Target'
-        ))
-        
-        fig.update_layout(
-            polar=dict(
-                radialaxis=dict(
-                    visible=True,
-                    range=[0, 100]
-                )),
-            showlegend=True,
-            height=500,
-            title="Civilization Health Radar"
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
+        try:
+            fig = go.Figure(data=go.Scatterpolar(
+                r=metrics['Current'],
+                theta=metrics['Metric'],
+                fill='toself',
+                name='Current Status'
+            ))
+            
+            fig.add_trace(go.Scatterpolar(
+                r=metrics['Target'],
+                theta=metrics['Metric'],
+                fill='toself',
+                name='Target'
+            ))
+            
+            fig.update_layout(
+                polar=dict(
+                    radialaxis=dict(
+                        visible=True,
+                        range=[0, 100]
+                    )),
+                showlegend=True,
+                height=500,
+                title="Civilization Health Radar"
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+        except Exception as e:
+            st.error(f"Radar chart error: {str(e)}")
+            st.dataframe(metrics, use_container_width=True)
     
     with tab2:
         st.markdown("### ⏰ Time Navigation Interface")
@@ -647,27 +900,30 @@ def main():
                         time.sleep(2)
                         result = time_travel.travel_to_year(target_year)
                         
-                        st.markdown(f"""
-                        <div class="time-travel-card">
-                            <h3>⏳ {result['status']}</h3>
-                            {f"<p><strong>Era:</strong> {result['era']}</p>" if 'era' in result else ""}
-                            {f"<p><strong>Civilization Level:</strong> {result['civilization_level']}</p>" if 'civilization_level' in result else ""}
-                            {f"<p><strong>Population:</strong> {result.get('world_population', 'Unknown')}</p>"}
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        if 'significant_events' in result:
-                            st.markdown("#### 📜 Significant Historical Events")
-                            for event in result['significant_events']:
-                                st.write(f"• **{abs(event['time_difference'])} years {('before' if event['time_difference'] > 0 else 'after')}**: {event['description']}")
-                        
-                        if 'predictions' in result:
-                            st.markdown("#### 🔮 Future Predictions")
-                            for pred in result['predictions']:
-                                st.write(f"• {pred}")
-                        
-                        if 'warning' in result and result['warning']:
-                            st.warning(result['warning'])
+                        if isinstance(result, dict):
+                            st.markdown(f"""
+                            <div class="time-travel-card">
+                                <h3>⏳ {result['status']}</h3>
+                                {f"<p><strong>Era:</strong> {result.get('era', 'Unknown')}</p>"}
+                                {f"<p><strong>Civilization Level:</strong> {result.get('civilization_level', 'Unknown')}</p>" if 'civilization_level' in result else ""}
+                                {f"<p><strong>Population:</strong> {result.get('world_population', 'Unknown')}</p>"}
+                            </div>
+                            """, unsafe_allow_html=True)
+                            
+                            if 'significant_events' in result:
+                                st.markdown("#### 📜 Significant Historical Events")
+                                for event in result['significant_events']:
+                                    st.write(f"• **{abs(event['time_difference'])} years {('before' if event['time_difference'] > 0 else 'after')}**: {event['description']}")
+                            
+                            if 'predictions' in result:
+                                st.markdown("#### 🔮 Future Predictions")
+                                for pred in result['predictions']:
+                                    st.write(f"• {pred}")
+                            
+                            if 'warning' in result and result['warning']:
+                                st.warning(result['warning'])
+                        else:
+                            st.info(result)
             
             else:
                 if st.button("🌀 LOAD ALTERNATE REALITY", type="primary", use_container_width=True):
@@ -724,76 +980,79 @@ def main():
                 with cols[0]:
                     if st.button("🦖 Dinosaur Era", use_container_width=True):
                         st.session_state.time_target = -66000000
-                        st.rerun()
+                        st.info("Jumping to 66 million years ago...")
                     
                     if st.button("🏛️ Ancient Rome", use_container_width=True):
                         st.session_state.time_target = 100
-                        st.rerun()
+                        st.info("Jumping to 100 CE...")
                     
                     if st.button("⚔️ Middle Ages", use_container_width=True):
                         st.session_state.time_target = 1300
-                        st.rerun()
+                        st.info("Jumping to 1300 CE...")
                     
                     if st.button("🏭 Industrial Rev", use_container_width=True):
                         st.session_state.time_target = 1800
-                        st.rerun()
+                        st.info("Jumping to 1800 CE...")
                 
                 with cols[1]:
                     if st.button("📱 Year 2000", use_container_width=True):
                         st.session_state.time_target = 2000
-                        st.rerun()
+                        st.info("Jumping to 2000 CE...")
                     
                     if st.button("🚀 Year 2050", use_container_width=True):
                         st.session_state.time_target = 2050
-                        st.rerun()
+                        st.info("Jumping to 2050 CE...")
                     
                     if st.button("🛸 Year 2100", use_container_width=True):
                         st.session_state.time_target = 2100
-                        st.rerun()
+                        st.info("Jumping to 2100 CE...")
                     
                     if st.button("🌌 Year 3000", use_container_width=True):
                         st.session_state.time_target = 3000
-                        st.rerun()
+                        st.info("Jumping to 3000 CE...")
             
             # Timeline visualization
             st.markdown("#### 📜 Human Timeline")
             
-            timeline_fig = go.Figure()
-            
-            # Add timeline events
-            events = [
-                {"year": -66000000, "event": "Dinosaurs Extinct", "importance": 10},
-                {"year": -10000, "event": "Agriculture Begins", "importance": 9},
-                {"year": -3000, "event": "Pyramids Built", "importance": 8},
-                {"year": 0, "event": "Common Era", "importance": 7},
-                {"year": 1450, "event": "Printing Press", "importance": 9},
-                {"year": 1760, "event": "Industrial Rev", "importance": 10},
-                {"year": 1969, "event": "Moon Landing", "importance": 9},
-                {"year": 2024, "event": "Present Day", "importance": 10},
-                {"year": 2050, "event": "Mars Colony", "importance": 8},
-                {"year": 2100, "event": "Dyson Swarm", "importance": 7},
-            ]
-            
-            for ev in events:
-                timeline_fig.add_trace(go.Scatter(
-                    x=[ev["year"]],
-                    y=[ev["importance"]],
-                    mode='markers+text',
-                    marker=dict(size=15, color='blue'),
-                    text=[ev["event"]],
-                    textposition="top center",
-                    name=ev["event"]
-                ))
-            
-            timeline_fig.update_layout(
-                title="Human Civilization Timeline",
-                xaxis_title="Year",
-                yaxis_title="Historical Importance",
-                height=400,
-                showlegend=False
-            )
-            
-            st.plotly_chart(timeline_fig, use_container_width=True)
+            try:
+                timeline_fig = go.Figure()
+                
+                # Add timeline events
+                events = [
+                    {"year": -66000000, "event": "Dinosaurs Extinct", "importance": 10},
+                    {"year": -10000, "event": "Agriculture Begins", "importance": 9},
+                    {"year": -3000, "event": "Pyramids Built", "importance": 8},
+                    {"year": 0, "event": "Common Era", "importance": 7},
+                    {"year": 1450, "event": "Printing Press", "importance": 9},
+                    {"year": 1760, "event": "Industrial Rev", "importance": 10},
+                    {"year": 1969, "event": "Moon Landing", "importance": 9},
+                    {"year": 2024, "event": "Present Day", "importance": 10},
+                    {"year": 2050, "event": "Mars Colony", "importance": 8},
+                    {"year": 2100, "event": "Dyson Swarm", "importance": 7},
+                ]
+                
+                for ev in events:
+                    timeline_fig.add_trace(go.Scatter(
+                        x=[ev["year"]],
+                        y=[ev["importance"]],
+                        mode='markers+text',
+                        marker=dict(size=15, color='blue'),
+                        text=[ev["event"]],
+                        textposition="top center",
+                        name=ev["event"]
+                    ))
+                
+                timeline_fig.update_layout(
+                    title="Human Civilization Timeline",
+                    xaxis_title="Year",
+                    yaxis_title="Historical Importance",
+                    height=400,
+                    showlegend=False
+                )
+                
+                st.plotly_chart(timeline_fig, use_container_width=True)
+            except Exception as e:
+                st.error(f"Timeline error: {str(e)}")
     
     with tab3:
         st.markdown("### 🎯 Universal Problem Solver")
@@ -834,19 +1093,8 @@ def main():
                     format="%.0f"
                 )
                 
-                # Format for display
-                if resources >= 1e15:
-                    resources_display = f"${resources/1e15:.1f}Q"  # Quadrillion
-                elif resources >= 1e12:
-                    resources_display = f"${resources/1e12:.1f}T"
-                elif resources >= 1e9:
-                    resources_display = f"${resources/1e9:.1f}B"
-                elif resources >= 1e6:
-                    resources_display = f"${resources/1e6:.1f}M"
-                elif resources >= 1e3:
-                    resources_display = f"${resources/1e3:.1f}K"
-                else:
-                    resources_display = f"${resources:,.0f}"
+                resources_display = format_large_number(resources)
+                st.info(f"Allocated: {resources_display}")
             
             with col_res2:
                 timeline = st.slider("Preferred Timeline (years)", 1, 100, 
@@ -857,70 +1105,80 @@ def main():
                 with st.spinner("Running quantum optimization algorithms..."):
                     time.sleep(2)
                     
-                    solution = problem_solver.solve_problem(problem, resources)
-                    
-                    st.success("✅ Solution Generated!")
-                    
-                    # Display solution
-                    st.markdown(f"""
-                    <div class="time-travel-card">
-                        <h3>✨ Optimal Solution</h3>
-                        <p><strong>Approach:</strong> {solution['solution']}</p>
-                        <p><strong>Required Resources:</strong> {resources_display}</p>
-                        <p><strong>Estimated Timeline:</strong> {timeline} years</p>
-                        <p><strong>Success Probability:</strong> {solution['success_probability']*100:.1f}%</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                    # Implementation plan
-                    st.markdown("#### 📋 Implementation Plan")
-                    
-                    steps = [
-                        f"Year 1-2: {solution.get('implementation_plan', {}).get('phase1', 'Initial research and planning')}",
-                        f"Year 3-5: {solution.get('implementation_plan', {}).get('phase2', 'Pilot projects and testing')}",
-                        f"Year 6-10: {solution.get('implementation_plan', {}).get('phase3', 'Global rollout and scaling')}",
-                        f"Year 11+: {solution.get('implementation_plan', {}).get('phase4', 'Maintenance and optimization')}"
-                    ]
-                    
-                    for i, step in enumerate(steps, 1):
-                        st.write(f"{i}. {step}")
-                    
-                    # Key milestones
-                    if 'key_milestones' in solution:
-                        st.markdown("#### 🎯 Key Milestones")
-                        for milestone in solution['key_milestones']:
-                            st.write(f"• {milestone}")
-                    
-                    # Potential roadblocks
-                    if 'potential_roadblocks' in solution:
-                        st.markdown("#### ⚠️ Potential Roadblocks")
-                        for roadblock in solution['potential_roadblocks']:
-                            st.write(f"• {roadblock}")
-                    
-                    # Visualization of impact
-                    st.markdown("#### 📈 Expected Impact")
-                    
-                    impact_data = pd.DataFrame({
-                        'Year': list(range(timeline + 1)),
-                        'Problem_Severity': [100 - (i/timeline)*80 for i in range(timeline + 1)],
-                        'Resources_Used': [(resources/timeline)*i for i in range(timeline + 1)],
-                        'Public_Support': [30 + (i/timeline)*40 for i in range(timeline + 1)]
-                    })
-                    
-                    fig = go.Figure()
-                    fig.add_trace(go.Scatter(x=impact_data['Year'], y=impact_data['Problem_Severity'],
-                                           mode='lines', name='Problem Severity'))
-                    fig.add_trace(go.Scatter(x=impact_data['Year'], y=impact_data['Public_Support'],
-                                           mode='lines', name='Public Support', yaxis='y2'))
-                    
-                    fig.update_layout(
-                        title='Expected Impact Over Time',
-                        yaxis=dict(title='Problem Severity (%)'),
-                        yaxis2=dict(title='Public Support (%)', overlaying='y', side='right'),
-                        height=400
-                    )
-                    
-                    st.plotly_chart(fig, use_container_width=True)
+                    try:
+                        solution = problem_solver.solve_problem(problem, resources)
+                        
+                        st.success("✅ Solution Generated!")
+                        
+                        # Display solution
+                        st.markdown(f"""
+                        <div class="time-travel-card">
+                            <h3>✨ Optimal Solution</h3>
+                            <p><strong>Approach:</strong> {solution['solution']}</p>
+                            <p><strong>Required Resources:</strong> {resources_display}</p>
+                            <p><strong>Estimated Timeline:</strong> {timeline} years</p>
+                            <p><strong>Success Probability:</strong> {solution['success_probability']*100:.1f}%</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        
+                        # Implementation plan
+                        st.markdown("#### 📋 Implementation Plan")
+                        
+                        if 'implementation_plan' in solution:
+                            for phase, description in solution['implementation_plan'].items():
+                                st.write(f"**{phase.replace('phase', 'Phase ')}**: {description}")
+                        else:
+                            steps = [
+                                f"Year 1-2: Initial research and planning",
+                                f"Year 3-5: Pilot projects and testing",
+                                f"Year 6-10: Global rollout and scaling",
+                                f"Year 11+: Maintenance and optimization"
+                            ]
+                            for i, step in enumerate(steps, 1):
+                                st.write(f"{i}. {step}")
+                        
+                        # Key milestones
+                        if 'key_milestones' in solution:
+                            st.markdown("#### 🎯 Key Milestones")
+                            for milestone in solution['key_milestones']:
+                                st.write(f"• {milestone}")
+                        
+                        # Potential roadblocks
+                        if 'potential_roadblocks' in solution:
+                            st.markdown("#### ⚠️ Potential Roadblocks")
+                            for roadblock in solution['potential_roadblocks']:
+                                st.write(f"• {roadblock}")
+                        
+                        # Visualization of impact
+                        st.markdown("#### 📈 Expected Impact")
+                        
+                        try:
+                            impact_data = pd.DataFrame({
+                                'Year': list(range(timeline + 1)),
+                                'Problem_Severity': [100 - (i/timeline)*80 for i in range(timeline + 1)],
+                                'Resources_Used': [(resources/timeline)*i for i in range(timeline + 1)],
+                                'Public_Support': [30 + (i/timeline)*40 for i in range(timeline + 1)]
+                            })
+                            
+                            fig = go.Figure()
+                            fig.add_trace(go.Scatter(x=impact_data['Year'], y=impact_data['Problem_Severity'],
+                                                   mode='lines', name='Problem Severity'))
+                            fig.add_trace(go.Scatter(x=impact_data['Year'], y=impact_data['Public_Support'],
+                                                   mode='lines', name='Public Support', yaxis='y2'))
+                            
+                            fig.update_layout(
+                                title='Expected Impact Over Time',
+                                yaxis=dict(title='Problem Severity (%)'),
+                                yaxis2=dict(title='Public Support (%)', overlaying='y', side='right'),
+                                height=400
+                            )
+                            
+                            st.plotly_chart(fig, use_container_width=True)
+                        except Exception as e:
+                            st.warning(f"Could not generate impact chart: {str(e)}")
+                            
+                    except Exception as e:
+                        st.error(f"Error solving problem: {str(e)}")
         
         # Multiple problem solver
         st.markdown("---")
@@ -944,14 +1202,7 @@ def main():
                 total_timeline = max(total_timeline, int(prob_data['timeline'].split()[0]))
             
             # Format total resources
-            if total_resources >= 1e15:
-                total_display = f"${total_resources/1e15:.1f}Q"
-            elif total_resources >= 1e12:
-                total_display = f"${total_resources/1e12:.1f}T"
-            elif total_resources >= 1e9:
-                total_display = f"${total_resources/1e9:.1f}B"
-            else:
-                total_display = f"${total_resources:,.0f}"
+            total_display = format_large_number(total_resources)
             
             st.info(f"**Total Resources Needed:** {total_display} | **Timeline:** {total_timeline} years")
             
@@ -964,12 +1215,7 @@ def main():
             col_syn1, col_syn2 = st.columns(2)
             with col_syn1:
                 adjusted_cost = total_resources * synergy_factor
-                if adjusted_cost >= 1e15:
-                    adj_display = f"${adjusted_cost/1e15:.1f}Q"
-                elif adjusted_cost >= 1e12:
-                    adj_display = f"${adjusted_cost/1e12:.1f}T"
-                else:
-                    adj_display = f"${adjusted_cost/1e9:.1f}B"
+                adj_display = format_large_number(adjusted_cost)
                 st.metric("Adjusted Cost", adj_display, f"-{(1-synergy_factor)*100:.0f}%")
             with col_syn2:
                 st.metric("Adjusted Timeline", f"{int(total_timeline*time_factor)} years", f"-{(1-time_factor)*100:.0f}%")
@@ -980,91 +1226,108 @@ def main():
         # Brain-inspired visualization
         st.markdown("#### 🧬 Collective Consciousness Visualization")
         
-        # Generate neural network data
-        nodes = []
-        edges = []
-        
-        # Create 50 major nodes (cities/regions)
-        for i in range(50):
-            nodes.append({
-                'id': f'node_{i}',
-                'label': f'Region_{i}',
-                'size': np.random.uniform(5, 20),
-                'color': f'rgb({np.random.randint(0,255)},{np.random.randint(0,255)},{np.random.randint(0,255)})',
-                'x': np.random.uniform(-100, 100),
-                'y': np.random.uniform(-100, 100),
-                'activity': np.random.uniform(0, 1)
-            })
-        
-        # Create connections
-        for i in range(100):
-            edges.append({
-                'source': f'node_{np.random.randint(0,50)}',
-                'target': f'node_{np.random.randint(0,50)}',
-                'strength': np.random.uniform(0.1, 1),
-                'type': np.random.choice(['economic', 'social', 'technological', 'cultural'])
-            })
-        
-        # Create network visualization
-        edge_traces = []
-        for edge in edges[:50]:  # Limit for performance
-            source = next(n for n in nodes if n['id'] == edge['source'])
-            target = next(n for n in nodes if n['id'] == edge['target'])
+        try:
+            # Generate neural network data
+            nodes = []
+            edges = []
             
-            edge_trace = go.Scatter(
-                x=[source['x'], target['x'], None],
-                y=[source['y'], target['y'], None],
-                line=dict(width=edge['strength']*3, color='rgba(100,100,100,0.3)'),
-                hoverinfo='none',
-                mode='lines'
+            # Create 50 major nodes (cities/regions)
+            for i in range(50):
+                nodes.append({
+                    'id': f'node_{i}',
+                    'label': f'Region_{i}',
+                    'size': np.random.uniform(5, 20),
+                    'color': f'rgb({np.random.randint(0,255)},{np.random.randint(0,255)},{np.random.randint(0,255)})',
+                    'x': np.random.uniform(-100, 100),
+                    'y': np.random.uniform(-100, 100),
+                    'activity': np.random.uniform(0, 1)
+                })
+            
+            # Create connections
+            for i in range(100):
+                edges.append({
+                    'source': f'node_{np.random.randint(0,50)}',
+                    'target': f'node_{np.random.randint(0,50)}',
+                    'strength': np.random.uniform(0.1, 1),
+                    'type': np.random.choice(['economic', 'social', 'technological', 'cultural'])
+                })
+            
+            # Create network visualization
+            edge_traces = []
+            for edge in edges[:50]:  # Limit for performance
+                source = next((n for n in nodes if n['id'] == edge['source']), None)
+                target = next((n for n in nodes if n['id'] == edge['target']), None)
+                
+                if source and target:
+                    edge_trace = go.Scatter(
+                        x=[source['x'], target['x'], None],
+                        y=[source['y'], target['y'], None],
+                        line=dict(width=edge['strength']*3, color='rgba(100,100,100,0.3)'),
+                        hoverinfo='none',
+                        mode='lines'
+                    )
+                    edge_traces.append(edge_trace)
+            
+            node_trace = go.Scatter(
+                x=[n['x'] for n in nodes],
+                y=[n['y'] for n in nodes],
+                mode='markers',
+                marker=dict(
+                    size=[n['size']*10 for n in nodes],
+                    color=[n['color'] for n in nodes],
+                    line=dict(width=2, color='white')
+                ),
+                text=[n['label'] for n in nodes],
+                hoverinfo='text'
             )
-            edge_traces.append(edge_trace)
-        
-        node_trace = go.Scatter(
-            x=[n['x'] for n in nodes],
-            y=[n['y'] for n in nodes],
-            mode='markers',
-            marker=dict(
-                size=[n['size']*10 for n in nodes],
-                color=[n['color'] for n in nodes],
-                line=dict(width=2, color='white')
-            ),
-            text=[n['label'] for n in nodes],
-            hoverinfo='text'
-        )
-        
-        fig = go.Figure(data=edge_traces + [node_trace])
-        fig.update_layout(
-            title='Planetary Neural Network - Live Connections',
-            showlegend=False,
-            height=600,
-            paper_bgcolor='black',
-            plot_bgcolor='black',
-            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
+            
+            fig = go.Figure(data=edge_traces + [node_trace])
+            fig.update_layout(
+                title='Planetary Neural Network - Live Connections',
+                showlegend=False,
+                height=600,
+                paper_bgcolor='black',
+                plot_bgcolor='black',
+                xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+        except Exception as e:
+            st.error(f"Neural network visualization error: {str(e)}")
+            st.info("Generating alternative visualization...")
+            
+            # Alternative: Simple scatter plot
+            fig = px.scatter(
+                x=[np.random.uniform(-100, 100) for _ in range(50)],
+                y=[np.random.uniform(-100, 100) for _ in range(50)],
+                size=[np.random.uniform(5, 20) for _ in range(50)],
+                title='Planetary Neural Nodes'
+            )
+            st.plotly_chart(fig, use_container_width=True)
         
         # Consciousness metrics
         st.markdown("#### 📊 Global Consciousness Metrics")
         
-        consciousness_data = pd.DataFrame({
-            'Metric': ['Collective IQ', 'Empathy Index', 'Creativity Flow', 
-                      'Decision Speed', 'Pattern Recognition', 'Memory Capacity',
-                      'Learning Rate', 'Intuition Score', 'Wisdom Accumulation'],
-            'Value': [np.random.uniform(60, 90) for _ in range(9)],
-            'Trend': np.random.choice(['↑', '↓', '→'], 9)
-        })
-        
-        # Bar chart
-        fig = px.bar(consciousness_data, x='Metric', y='Value', 
-                    title='Consciousness Metrics',
-                    color='Value',
-                    color_continuous_scale='Viridis')
-        
-        fig.update_layout(height=400)
-        st.plotly_chart(fig, use_container_width=True)
+        try:
+            consciousness_data = pd.DataFrame({
+                'Metric': ['Collective IQ', 'Empathy Index', 'Creativity Flow', 
+                          'Decision Speed', 'Pattern Recognition', 'Memory Capacity',
+                          'Learning Rate', 'Intuition Score', 'Wisdom Accumulation'],
+                'Value': [np.random.uniform(60, 90) for _ in range(9)],
+                'Trend': np.random.choice(['↑', '↓', '→'], 9)
+            })
+            
+            # Bar chart
+            fig = px.bar(consciousness_data, x='Metric', y='Value', 
+                        title='Consciousness Metrics',
+                        color='Value',
+                        color_continuous_scale='Viridis')
+            
+            fig.update_layout(height=400)
+            st.plotly_chart(fig, use_container_width=True)
+        except Exception as e:
+            st.error(f"Consciousness metrics error: {str(e)}")
         
         # Real-time thought stream
         st.markdown("#### 💭 Live Global Thought Stream")
@@ -1096,29 +1359,32 @@ def main():
         
         kardashev_level = 0.73  # Current human civilization
         
-        fig = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=kardashev_level,
-            domain={'x': [0, 1], 'y': [0, 1]},
-            title={'text': "Kardashev Scale"},
-            gauge={
-                'axis': {'range': [0, 3], 'tickwidth': 1},
-                'bar': {'color': "darkblue"},
-                'steps': [
-                    {'range': [0, 1], 'color': "lightgray"},
-                    {'range': [1, 2], 'color': "gray"},
-                    {'range': [2, 3], 'color': "darkgray"}
-                ],
-                'threshold': {
-                    'line': {'color': "red", 'width': 4},
-                    'thickness': 0.75,
-                    'value': kardashev_level
+        try:
+            fig = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=kardashev_level,
+                domain={'x': [0, 1], 'y': [0, 1]},
+                title={'text': "Kardashev Scale"},
+                gauge={
+                    'axis': {'range': [0, 3], 'tickwidth': 1},
+                    'bar': {'color': "darkblue"},
+                    'steps': [
+                        {'range': [0, 1], 'color': "lightgray"},
+                        {'range': [1, 2], 'color': "gray"},
+                        {'range': [2, 3], 'color': "darkgray"}
+                    ],
+                    'threshold': {
+                        'line': {'color': "red", 'width': 4},
+                        'thickness': 0.75,
+                        'value': kardashev_level
+                    }
                 }
-            }
-        ))
-        
-        fig.update_layout(height=300)
-        st.plotly_chart(fig, use_container_width=True)
+            ))
+            
+            fig.update_layout(height=300)
+            st.plotly_chart(fig, use_container_width=True)
+        except Exception as e:
+            st.error(f"Gauge chart error: {str(e)}")
         
         # Scale explanation
         col_scale1, col_scale2, col_scale3 = st.columns(3)
@@ -1150,30 +1416,33 @@ def main():
         # Cosmic timeline
         st.markdown("#### 🕰️ Cosmic Timeline")
         
-        cosmic_events = [
-            {"time": -13700000000, "event": "Big Bang", "scale": "cosmic"},
-            {"time": -4500000000, "event": "Earth Forms", "scale": "planetary"},
-            {"time": -3500000000, "event": "First Life", "scale": "biological"},
-            {"time": -500000, "event": "First Humans", "scale": "human"},
-            {"time": -10000, "event": "Civilization", "scale": "human"},
-            {"time": 0, "event": "Present Day", "scale": "human"},
-            {"time": 1000, "event": "Type I Civilization", "scale": "civilizational"},
-            {"time": 10000, "event": "Type II Civilization", "scale": "stellar"},
-            {"time": 1000000, "event": "Type III Civilization", "scale": "galactic"},
-            {"time": 10000000000, "event": "Heat Death?", "scale": "cosmic"},
-        ]
-        
-        cosmic_df = pd.DataFrame(cosmic_events)
-        
-        fig = px.scatter(cosmic_df, x='time', y=[1]*len(cosmic_df),
-                        size=[10]*len(cosmic_df), color='scale',
-                        text='event', log_x=True,
-                        title='Cosmic Timeline (Log Scale)')
-        
-        fig.update_traces(textposition='top center')
-        fig.update_layout(height=400, showlegend=True)
-        
-        st.plotly_chart(fig, use_container_width=True)
+        try:
+            cosmic_events = [
+                {"time": -13700000000, "event": "Big Bang", "scale": "cosmic"},
+                {"time": -4500000000, "event": "Earth Forms", "scale": "planetary"},
+                {"time": -3500000000, "event": "First Life", "scale": "biological"},
+                {"time": -500000, "event": "First Humans", "scale": "human"},
+                {"time": -10000, "event": "Civilization", "scale": "human"},
+                {"time": 0, "event": "Present Day", "scale": "human"},
+                {"time": 1000, "event": "Type I Civilization", "scale": "civilizational"},
+                {"time": 10000, "event": "Type II Civilization", "scale": "stellar"},
+                {"time": 1000000, "event": "Type III Civilization", "scale": "galactic"},
+                {"time": 10000000000, "event": "Heat Death?", "scale": "cosmic"},
+            ]
+            
+            cosmic_df = pd.DataFrame(cosmic_events)
+            
+            fig = px.scatter(cosmic_df, x='time', y=[1]*len(cosmic_df),
+                            size=[10]*len(cosmic_df), color='scale',
+                            text='event', log_x=True,
+                            title='Cosmic Timeline (Log Scale)')
+            
+            fig.update_traces(textposition='top center')
+            fig.update_layout(height=400, showlegend=True)
+            
+            st.plotly_chart(fig, use_container_width=True)
+        except Exception as e:
+            st.error(f"Cosmic timeline error: {str(e)}")
         
         # Alien contact simulation
         st.markdown("#### 👽 Drake Equation Calculator")
@@ -1280,7 +1549,7 @@ def main():
                 },
                 "created": datetime.now().isoformat(),
                 "creator": user_role,
-                "version": "4.0"
+                "version": "4.2"
             }
             
             json_str = json.dumps(reality_config, indent=2)
@@ -1297,7 +1566,7 @@ def main():
     st.markdown(f"""
     <div style="text-align: center; color: #aaa; padding: 20px;">
         <p style="font-size: 1.1rem;">
-            🧠 <b>TERRA COGNITA v4.1</b> | 
+            🧠 <b>TERRA COGNITA v4.2</b> | 
             🌍 Digital Twin of Earth | 
             ⏰ Time Travel Interface | 
             🎯 Universal Problem Solver
